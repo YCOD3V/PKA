@@ -1,6 +1,6 @@
 ﻿# The Akatsuki — Calculador de ventajas
 
-Sitio web estático en español para consultar las ventajas entre tipos Pokémon, con una interfaz inspirada en Akatsuki.
+Sitio web estático en español para consultar las ventajas entre tipos Pokémon, con una interfaz inspirada en el clan The Akatsuki.
 
 ## Estructura
 

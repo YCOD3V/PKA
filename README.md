@@ -1,6 +1,6 @@
 ﻿# The Akatsuki — Hunts y calculadora de ventajas
 
-Sitio estático en español con dos secciones: **Localizaciones (Hunts)** y **Calculadora de ventajas**. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
+Sitio estático en español con tres secciones: **Inicio**, **Localizaciones (Hunts)** y **Calculadora de ventajas**. Los mapas se abren en una ventana dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
 
 ## Estructura
 
@@ -32,4 +32,5 @@ Importa el repositorio desde GitHub. Selecciona **Other** como framework y deja 
 
 ## Rutas y navegación
 
-CSS, JavaScript y logo usan rutas relativas. Las dos vistas se controlan con fragmentos (`#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.
+CSS, JavaScript y logo usan rutas relativas. Las vistas se controlan con fragmentos (`#home`, `#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.
+

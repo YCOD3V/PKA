@@ -195,42 +195,47 @@
   }
 
   const app = document.getElementById('app');
+  const homeTab = document.getElementById('homeTab');
   const huntsTab = document.getElementById('huntsTab');
   const calculatorTab = document.getElementById('calculatorTab');
+  const homePanel = document.getElementById('homePanel');
   const huntsPanel = document.getElementById('huntsPanel');
   const calculatorPanel = document.getElementById('calculatorPanel');
+  const tabs = [homeTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
   const huntRows = document.getElementById('huntRows');
   const huntCount = document.getElementById('huntCount');
   const huntEmpty = document.getElementById('huntEmpty');
+  const mapDialog = document.getElementById('mapDialog');
+  const mapDialogTitle = document.getElementById('mapDialogTitle');
+  const mapDialogImage = document.getElementById('mapDialogImage');
+  const mapDialogClose = document.getElementById('mapDialogClose');
   const hunts = Array.isArray(window.HUNTS_DATA) ? window.HUNTS_DATA : [];
   const zones = ['normal', 'wildscape', 'hoenn'];
   const zoneLabels = { normal: 'Hunt normal', wildscape: 'Wildscape', hoenn: 'Hoenn' };
 
   function showView(view, updateHash){
-    const showHunts = view !== 'calculator';
-    app.dataset.view = showHunts ? 'hunts' : 'calculator';
-    huntsPanel.hidden = !showHunts;
-    calculatorPanel.hidden = showHunts;
-    huntsTab.classList.toggle('active', showHunts);
-    calculatorTab.classList.toggle('active', !showHunts);
-    huntsTab.setAttribute('aria-selected', String(showHunts));
-    calculatorTab.setAttribute('aria-selected', String(!showHunts));
-    huntsTab.tabIndex = showHunts ? 0 : -1;
-    calculatorTab.tabIndex = showHunts ? -1 : 0;
-    if (updateHash && location.hash !== (showHunts ? '#hunts' : '#calculator')) {
-      location.hash = showHunts ? 'hunts' : 'calculator';
-    }
+    const activeView = Object.prototype.hasOwnProperty.call(panels, view) ? view : 'home';
+    app.dataset.view = activeView;
+    Object.entries(panels).forEach(([key, panel]) => { panel.hidden = key !== activeView; });
+    tabs.forEach(tab => {
+      const active = tab.id === activeView + 'Tab';
+      tab.classList.toggle('active', active);
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+    if (updateHash && location.hash !== '#' + activeView) location.hash = activeView;
   }
 
-  huntsTab.addEventListener('click', () => showView('hunts', true));
-  calculatorTab.addEventListener('click', () => showView('calculator', true));
+  tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
-    showView(location.hash.toLowerCase().includes('calculator') ? 'calculator' : 'hunts', false);
+    const hash = location.hash.slice(1).toLowerCase();
+    showView(hash === 'hunts' || hash === 'calculator' ? hash : 'home', false);
   });
-  [huntsTab, calculatorTab].forEach((tab, index, tabs) => {
+  tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
       let next = null;
       if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length;
@@ -240,8 +245,8 @@
       if (next !== null) { event.preventDefault(); tabs[next].focus(); tabs[next].click(); }
     });
   });
-  showView(location.hash.toLowerCase().includes('calculator') ? 'calculator' : 'hunts', false);
-
+  const initialHash = location.hash.slice(1).toLowerCase();
+  showView(initialHash === 'hunts' || initialHash === 'calculator' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }
@@ -256,7 +261,7 @@
     const mapLinks = (entry.maps || []).map((url, index) => {
       const safeUrl = escapeHtml(url);
       const alt = escapeHtml(pokemonName + ' — mapa de ' + zoneLabels[zone] + (index ? ' ' + (index + 1) : ''));
-      return '<a class="map-link" href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" aria-label="Abrir ' + alt + ' en una pestaña nueva"><img src="' + safeUrl + '" alt="' + alt + '" loading="lazy" decoding="async"></a>';
+      return '<a class="map-link" href="' + safeUrl + '" aria-label="Ver ' + alt + ' ampliado en esta página"><img src="' + safeUrl + '" alt="' + alt + '" loading="lazy" decoding="async"></a>';
     }).join('');
     const note = entry.note ? '<span class="location-note">' + escapeHtml(entry.note) + '</span>' : '';
     return mapLinks || note ? '<div class="map-links">' + mapLinks + note + '</div>' : '<span class="unavailable">—</span>';
@@ -296,9 +301,26 @@
   huntSearch.addEventListener('input', renderHunts);
   tierFilter.addEventListener('change', renderHunts);
   zoneFilter.addEventListener('change', renderHunts);
+
+  huntRows.addEventListener('click', event => {
+    const link = event.target.closest('.map-link');
+    if (!link) return;
+    event.preventDefault();
+    const preview = link.querySelector('img');
+    mapDialogTitle.textContent = preview ? preview.alt.replace(/^.*? — /, '') : 'Mapa de localización';
+    mapDialogImage.src = link.href;
+    mapDialog.showModal();
+  });
+  mapDialogClose.addEventListener('click', () => mapDialog.close());
+  mapDialog.addEventListener('click', event => {
+    if (event.target === mapDialog) mapDialog.close();
+  });
+  mapDialog.addEventListener('close', () => { mapDialogImage.removeAttribute('src'); });
+
   renderHunts();
   render();
 })();
+
 
 
 

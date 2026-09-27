@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-  <div class="stage" id="app" data-view="hunts">
+  <div class="stage" id="app" data-view="home">
     <div class="glow glow-a" id="glowA" aria-hidden="true"></div>
     <div class="glow glow-b" id="glowB" aria-hidden="true"></div>
     <div class="scanlines" aria-hidden="true"></div>
@@ -22,12 +22,18 @@
         <img src="./img/LogoClan.png" alt="Emblema de The Akatsuki" class="site-logo" width="220">
       </div>
 
-      <nav class="section-tabs" role="tablist" aria-label="Herramientas Pokémon">
-        <button class="section-tab active" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="true">Localizaciones (Hunts)</button>
+      <nav class="section-tabs" role="tablist" aria-label="Secciones del sitio">
+        <button class="section-tab active" id="homeTab" type="button" role="tab" aria-controls="homePanel" aria-selected="true">Inicio</button>
+        <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones (Hunts)</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
       </nav>
 
-      <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0">
+      <section class="page-panel home-panel" id="homePanel" role="tabpanel" aria-labelledby="homeTab" tabindex="0">
+        <img src="./img/LogoClan.png" alt="The Akatsuki" class="home-logo" width="340">
+        <p class="home-credit">Extensión realizada por Driel para el clan The Akatsuki.</p>
+      </section>
+
+      <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Localizaciones <span class="title-mark">(Hunts)</span></h1>
           <p class="subtitle">Busca un Pokémon, revisa su tier y abre el mapa de cada zona de caza.</p>
@@ -57,7 +63,7 @@
           </table>
           <p class="empty-results" id="huntEmpty" hidden>No se encontraron Pokémon con esos filtros.</p>
         </div>
-        <p class="data-credit">Datos tomados de la captura de referencia: 391 registros. El sitio original puede mostrar más. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/edit?pli=1&amp;gid=696731486#gid=696731486" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>. Sprites y mapas cargados desde sus fuentes originales.</p>
+        <p class="data-credit">Extensión realizada por Driel para el clan The Akatsuki. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/edit?pli=1&amp;gid=696731486#gid=696731486" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>. Sprites y mapas cargados desde sus fuentes originales.</p>
       </section>
 
       <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>
@@ -75,8 +81,16 @@
     </main>
     <div class="bottom-space"></div>
   </div>
+
+  <dialog class="map-dialog" id="mapDialog" aria-labelledby="mapDialogTitle">
+    <div class="map-dialog-header">
+      <h2 id="mapDialogTitle">Mapa de localización</h2>
+      <button class="map-dialog-close" id="mapDialogClose" type="button" aria-label="Cerrar mapa">&times;</button>
+    </div>
+    <div class="map-dialog-image-wrap"><img id="mapDialogImage" alt="Mapa de localización ampliado"></div>
+  </dialog>
+
   <script src="./js/hunts-data.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>
-

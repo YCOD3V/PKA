@@ -194,7 +194,112 @@
     });
   }
 
+  const app = document.getElementById('app');
+  const huntsTab = document.getElementById('huntsTab');
+  const calculatorTab = document.getElementById('calculatorTab');
+  const huntsPanel = document.getElementById('huntsPanel');
+  const calculatorPanel = document.getElementById('calculatorPanel');
+  const huntSearch = document.getElementById('huntSearch');
+  const tierFilter = document.getElementById('tierFilter');
+  const zoneFilter = document.getElementById('zoneFilter');
+  const huntRows = document.getElementById('huntRows');
+  const huntCount = document.getElementById('huntCount');
+  const huntEmpty = document.getElementById('huntEmpty');
+  const hunts = Array.isArray(window.HUNTS_DATA) ? window.HUNTS_DATA : [];
+  const zones = ['normal', 'wildscape', 'hoenn'];
+  const zoneLabels = { normal: 'Hunt normal', wildscape: 'Wildscape', hoenn: 'Hoenn' };
+
+  function showView(view, updateHash){
+    const showHunts = view !== 'calculator';
+    app.dataset.view = showHunts ? 'hunts' : 'calculator';
+    huntsPanel.hidden = !showHunts;
+    calculatorPanel.hidden = showHunts;
+    huntsTab.classList.toggle('active', showHunts);
+    calculatorTab.classList.toggle('active', !showHunts);
+    huntsTab.setAttribute('aria-selected', String(showHunts));
+    calculatorTab.setAttribute('aria-selected', String(!showHunts));
+    huntsTab.tabIndex = showHunts ? 0 : -1;
+    calculatorTab.tabIndex = showHunts ? -1 : 0;
+    if (updateHash && location.hash !== (showHunts ? '#hunts' : '#calculator')) {
+      location.hash = showHunts ? 'hunts' : 'calculator';
+    }
+  }
+
+  huntsTab.addEventListener('click', () => showView('hunts', true));
+  calculatorTab.addEventListener('click', () => showView('calculator', true));
+  window.addEventListener('hashchange', () => {
+    showView(location.hash.toLowerCase().includes('calculator') ? 'calculator' : 'hunts', false);
+  });
+  [huntsTab, calculatorTab].forEach((tab, index, tabs) => {
+    tab.addEventListener('keydown', event => {
+      let next = null;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index + tabs.length - 1) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== null) { event.preventDefault(); tabs[next].focus(); tabs[next].click(); }
+    });
+  });
+  showView(location.hash.toLowerCase().includes('calculator') ? 'calculator' : 'hunts', false);
+
+  function escapeHtml(value){
+    return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  }
+
+  function hasZoneData(record, zone){
+    const entry = record[zone];
+    return entry && ((entry.maps && entry.maps.length > 0) || entry.note);
+  }
+
+  function renderLocation(entry, pokemonName, zone){
+    if (!entry) return '<span class="unavailable">—</span>';
+    const mapLinks = (entry.maps || []).map((url, index) => {
+      const safeUrl = escapeHtml(url);
+      const alt = escapeHtml(pokemonName + ' — mapa de ' + zoneLabels[zone] + (index ? ' ' + (index + 1) : ''));
+      return '<a class="map-link" href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" aria-label="Abrir ' + alt + ' en una pestaña nueva"><img src="' + safeUrl + '" alt="' + alt + '" loading="lazy" decoding="async"></a>';
+    }).join('');
+    const note = entry.note ? '<span class="location-note">' + escapeHtml(entry.note) + '</span>' : '';
+    return mapLinks || note ? '<div class="map-links">' + mapLinks + note + '</div>' : '<span class="unavailable">—</span>';
+  }
+
+  function renderHunts(){
+    const query = huntSearch.value.trim().toLocaleLowerCase('es');
+    const tier = tierFilter.value;
+    const zone = zoneFilter.value;
+    const filtered = hunts.filter(record => {
+      const matchesQuery = !query || (record.name + ' ' + record.id + ' ' + record.tier).toLocaleLowerCase('es').includes(query);
+      const matchesTier = !tier || record.tier === tier;
+      const matchesZone = !zone || hasZoneData(record, zone);
+      return matchesQuery && matchesTier && matchesZone;
+    });
+
+    huntRows.innerHTML = filtered.map(record => {
+      const tierClass = String(record.tier).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return '<tr>' +
+        '<td><div class="pokemon-cell"><img class="pokemon-sprite" src="' + escapeHtml(record.sprite) + '" alt="" loading="lazy" decoding="async"><div><span class="pokemon-name">' + escapeHtml(record.name) + '</span><span class="pokemon-number">#' + escapeHtml(record.id) + '</span></div></div></td>' +
+        '<td><span class="tier-badge tier-' + tierClass + '">' + escapeHtml(record.tier) + '</span></td>' +
+        zones.map(key => '<td>' + renderLocation(record[key], record.name, key) + '</td>').join('') +
+      '</tr>';
+    }).join('');
+    huntCount.textContent = filtered.length + ' Pokémon';
+    huntEmpty.hidden = filtered.length > 0;
+  }
+
+  Array.from(new Set(hunts.map(record => record.tier).filter(Boolean)))
+    .sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+    .forEach(tier => {
+      const option = document.createElement('option');
+      option.value = tier;
+      option.textContent = tier;
+      tierFilter.appendChild(option);
+    });
+  huntSearch.addEventListener('input', renderHunts);
+  tierFilter.addEventListener('change', renderHunts);
+  zoneFilter.addEventListener('change', renderHunts);
+  renderHunts();
   render();
 })();
+
+
 
 

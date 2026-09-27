@@ -375,3 +375,56 @@
 .title{ text-align:center; font-size:clamp(16px, 4.4vw, 20px); }
 .subtitle{ margin:0 auto; text-align:center; white-space:normal; }
 .stage{ max-width:480px; }
+
+/* Navegación entre herramientas */
+.page-panel[hidden]{ display:none !important; }
+.stage[data-view="hunts"]{ max-width:1200px; }
+.stage[data-view="calculator"]{ max-width:480px; }
+.section-tabs{ display:flex; gap:8px; padding:6px; margin:0 0 22px; border:1px solid var(--border); border-radius:14px; background:var(--panel); }
+.section-tab{ flex:1; min-height:44px; padding:10px 14px; border:1px solid transparent; border-radius:10px; background:transparent; color:var(--text-dim); font:700 13px var(--font-body); cursor:pointer; transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease; }
+.section-tab:hover{ color:var(--text); border-color:var(--border); }
+.section-tab.active{ color:var(--text); background:color-mix(in srgb,var(--accent) 18%,var(--panel-2)); border-color:color-mix(in srgb,var(--accent) 60%,transparent); box-shadow:0 0 16px rgba(229,9,20,.16); }
+.page-header{ display:block; padding:0 2px 16px; }
+.page-header .title{ text-align:left; }
+.page-header .subtitle{ margin:5px 0 0; text-align:left; }
+
+/* Búsqueda y tabla de localizaciones */
+.hunt-toolbar{ display:flex; align-items:end; gap:10px; flex-wrap:wrap; padding:12px; margin-bottom:12px; border:1px solid var(--border); border-radius:14px; background:var(--panel); }
+.hunt-search{ display:flex; align-items:center; gap:9px; flex:1 1 250px; min-height:42px; padding:0 12px; border:1px solid var(--border); border-radius:9px; background:var(--screen); color:var(--text-dim); }
+.hunt-search span{ color:var(--accent); font-size:22px; line-height:1; }
+.hunt-search input{ width:100%; min-width:0; border:0; outline:0; background:transparent; color:var(--text); font:500 13px var(--font-body); }
+.hunt-search input::placeholder{ color:var(--text-faint); }
+.filter-label{ display:flex; flex-direction:column; gap:5px; color:var(--text-dim); font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+.filter-select{ min-width:145px; min-height:42px; padding:0 30px 0 10px; border:1px solid var(--border); border-radius:9px; background:var(--screen); color:var(--text); font:500 12px var(--font-body); }
+.hunt-count{ margin:0 2px 12px auto; color:var(--text-dim); font:11px var(--font-mono); white-space:nowrap; }
+.hunt-table-wrap{ overflow:auto; border:1px solid var(--border); border-radius:14px; background:linear-gradient(180deg,var(--panel),var(--screen)); }
+.hunt-table{ width:100%; min-width:760px; border-collapse:collapse; text-align:left; }
+.hunt-table th{ position:sticky; top:0; z-index:1; padding:12px 14px; border-bottom:1px solid var(--border); background:#171717; color:var(--text-dim); font-size:10px; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
+.hunt-table td{ padding:9px 14px; border-bottom:1px solid var(--border-soft); color:var(--text); font-size:12px; vertical-align:middle; }
+.hunt-table tbody tr:last-child td{ border-bottom:0; }
+.hunt-table tbody tr:hover{ background:rgba(229,9,20,.055); }
+.pokemon-cell{ display:flex; align-items:center; gap:9px; min-width:155px; }
+.pokemon-sprite{ width:38px; height:38px; object-fit:contain; border-radius:9px; background:#101010; image-rendering:pixelated; }
+.pokemon-name{ display:block; font-weight:700; }
+.pokemon-number{ display:block; margin-top:2px; color:var(--text-faint); font:9px var(--font-mono); }
+.tier-badge{ display:inline-flex; min-width:38px; justify-content:center; padding:4px 7px; border:1px solid rgba(255,255,255,.12); border-radius:6px; background:var(--panel-2); color:#f2f2f2; font:700 10px var(--font-mono); }
+.tier-t1,.tier-mythic{ border-color:rgba(229,9,20,.6); background:rgba(201,0,0,.24); }
+.tier-t2,.tier-legendary{ border-color:rgba(230,125,54,.45); background:rgba(142,69,23,.24); }
+.map-links{ display:flex; flex-wrap:wrap; gap:6px; }
+.map-link{ display:block; width:72px; height:42px; overflow:hidden; border:1px solid var(--border); border-radius:7px; background:#090909; transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease; }
+.map-link:hover{ transform:translateY(-2px); border-color:var(--accent); box-shadow:0 0 12px rgba(229,9,20,.22); }
+.map-link img{ display:block; width:100%; height:100%; object-fit:cover; }
+.location-note{ display:inline-block; max-width:170px; color:var(--text-dim); font-size:11px; line-height:1.4; }
+.unavailable{ color:#666; }
+.empty-results{ padding:24px; margin:0; color:var(--text-dim); text-align:center; }
+.data-credit{ margin:12px 2px 0; color:var(--text-faint); font-size:10px; line-height:1.6; }
+.data-credit a{ color:var(--text-dim); text-decoration-color:var(--accent-dim); text-underline-offset:3px; }
+.data-credit a:hover{ color:var(--text); }
+@media(max-width:620px){
+  .section-tab{ padding:9px 7px; font-size:11px; }
+  .hunt-toolbar{ align-items:stretch; }
+  .filter-label{ flex:1 1 130px; }
+  .filter-select{ width:100%; min-width:0; }
+  .hunt-count{ margin:0 0 2px auto; }
+  .page-header .title{ font-size:18px; }
+}

@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Consulta las ventajas de los tipos Pokémon con una interfaz inspirada en el clan The Akatsuki.">
+  <meta name="description" content="Consulta localizaciones de caza y ventajas de tipos Pokémon en una interfaz inspirada en Akatsuki.">
   <meta name="theme-color" content="#0b0b0b">
-  <title>The Akatsuki | Calculador de ventajas</title>
+  <title>The Akatsuki | Hunts y calculadora de ventajas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap">
   <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-  <div class="stage">
+  <div class="stage" id="app" data-view="hunts">
     <div class="glow glow-a" id="glowA" aria-hidden="true"></div>
     <div class="glow glow-b" id="glowB" aria-hidden="true"></div>
     <div class="scanlines" aria-hidden="true"></div>
@@ -22,24 +22,60 @@
         <img src="./img/LogoClan.png" alt="Emblema de The Akatsuki" class="site-logo" width="220">
       </div>
 
-      <header class="header">
-        <div class="header-top">
-          <span class="dex-lamp" aria-hidden="true"></span>
-          <h1 class="title">CALCULADOR DE VENTAJAS</h1>
+      <nav class="section-tabs" role="tablist" aria-label="Herramientas Pokémon">
+        <button class="section-tab active" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="true">Localizaciones (Hunts)</button>
+        <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
+      </nav>
+
+      <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0">
+        <header class="header page-header">
+          <h1 class="title">Localizaciones <span class="title-mark">(Hunts)</span></h1>
+          <p class="subtitle">Busca un Pokémon, revisa su tier y abre el mapa de cada zona de caza.</p>
+        </header>
+        <div class="hunt-toolbar">
+          <label class="hunt-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="huntSearch" type="search" placeholder="Buscar Pokémon…" autocomplete="off" aria-label="Buscar Pokémon">
+          </label>
+          <label class="filter-label">Categoría
+            <select id="tierFilter" class="filter-select"><option value="">Todas las categorías</option></select>
+          </label>
+          <label class="filter-label">Zona
+            <select id="zoneFilter" class="filter-select">
+              <option value="">Todas las zonas</option>
+              <option value="normal">Hunt normal</option>
+              <option value="wildscape">Wildscape (150+)</option>
+              <option value="hoenn">Hoenn (250+)</option>
+            </select>
+          </label>
+          <span class="hunt-count" id="huntCount" aria-live="polite"></span>
         </div>
-        <p class="subtitle">Elige uno o varios tipos y descubre sus ventajas en combate.</p>
-      </header>
+        <div class="hunt-table-wrap">
+          <table class="hunt-table">
+            <thead><tr><th scope="col">Pokémon</th><th scope="col">Categoría</th><th scope="col">Hunt normal</th><th scope="col">Wildscape (150+)</th><th scope="col">Hoenn (250+)</th></tr></thead>
+            <tbody id="huntRows"></tbody>
+          </table>
+          <p class="empty-results" id="huntEmpty" hidden>No se encontraron Pokémon con esos filtros.</p>
+        </div>
+        <p class="data-credit">Datos tomados de la captura de referencia: 391 registros. El sitio original puede mostrar más. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/edit?pli=1&amp;gid=696731486#gid=696731486" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>. Sprites y mapas cargados desde sus fuentes originales.</p>
+      </section>
 
-      <section class="grid" id="grid" role="listbox" aria-label="Tipos de Pokémon" aria-multiselectable="true"></section>
-
-      <section class="result-panel" aria-label="Resultados de combate">
-        <div class="result-head" id="resultHead"></div>
-        <div class="result-caption" id="resultCaption" hidden>Ventaja estratégica contra</div>
-        <div class="result-body" id="resultBody" aria-live="polite"></div>
+      <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title">Calculadora de ventajas</h1>
+          <p class="subtitle">Elige uno o varios tipos y descubre sus ventajas en combate.</p>
+        </header>
+        <section class="grid" id="grid" role="listbox" aria-label="Tipos de Pokémon" aria-multiselectable="true"></section>
+        <section class="result-panel" aria-label="Resultados de combate">
+          <div class="result-head" id="resultHead"></div>
+          <div class="result-caption" id="resultCaption" hidden>Ventaja estratégica contra</div>
+          <div class="result-body" id="resultBody" aria-live="polite"></div>
+        </section>
       </section>
     </main>
     <div class="bottom-space"></div>
   </div>
+  <script src="./js/hunts-data.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>

@@ -200,13 +200,15 @@
   const huntsTab = document.getElementById('huntsTab');
   const calculatorTab = document.getElementById('calculatorTab');
   const aboutTab = document.getElementById('aboutTab');
+  const rotationsTab = document.getElementById('rotationsTab');
   const homePanel = document.getElementById('homePanel');
   const pokedexPanel = document.getElementById('pokedexPanel');
   const huntsPanel = document.getElementById('huntsPanel');
   const calculatorPanel = document.getElementById('calculatorPanel');
   const aboutPanel = document.getElementById('aboutPanel');
-  const tabs = [homeTab, aboutTab, pokedexTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel, about: aboutPanel };
+  const rotationsPanel = document.getElementById('rotationsPanel');
+  const tabs = [homeTab, aboutTab, rotationsTab, pokedexTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
@@ -228,6 +230,7 @@
   let selectedHuntRecord = null;
   const pokemonDialogHunt = document.getElementById('pokemonDialogHunt');
   const pokedex = Array.isArray(window.POKEDEX_DATA) ? window.POKEDEX_DATA : [];
+  const rotationsData = window.ROTACIONES_DATA || null;
   const mapDialog = document.getElementById('mapDialog');
   const mapDialogTitle = document.getElementById('mapDialogTitle');
   const mapDialogImage = document.getElementById('mapDialogImage');
@@ -252,7 +255,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -265,7 +268,7 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }
@@ -351,6 +354,49 @@
     image.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
       (shiny ? 'shiny/' : '') + id + '.png';
   }
+
+  const rotationGrid = document.getElementById('rotationGrid');
+  const rotationTypeNav = document.getElementById('rotationTypeNav');
+  function rotationSprite(member){
+    if (member.sprite) return member.sprite;
+    let species = member.name.split(/\s+[?-]\s+/)[0].replace(/\s*?+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
+    const shiny = /^Shiny\s+/i.test(species);
+    species = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(Psy|Bug)$/i, '').trim();
+    const found = pokedex.find(p => p.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + species).toLocaleLowerCase('en')) ||
+      pokedex.find(p => p.name.toLocaleLowerCase('en') === species.toLocaleLowerCase('en'));
+    return found ? found.sprite : '';
+  }
+  function renderRotations(){
+    if (!rotationsData || !rotationGrid) return;
+    document.getElementById('rotationsTitle').textContent = rotationsData.title;
+    document.getElementById('rotationsDescription').textContent = rotationsData.description;
+    document.getElementById('rotationCaveat').innerHTML = '<strong>Importante:</strong> ' + escapeHtml(rotationsData.caveat);
+    const req = rotationsData.minRequirements;
+    document.getElementById('rotationRequirements').innerHTML = '<h2>' + escapeHtml(req.title) + '</h2><p>' + escapeHtml(req.intro) + '</p><ul>' + req.items.map(item => '<li>' + escapeHtml(item) + '</li>').join('') + '</ul><p class="rotation-note">' + escapeHtml(req.note) + '</p>';
+    document.getElementById('rotationTips').innerHTML = rotationsData.tips.map(tip => '<article><h3>' + escapeHtml(tip.name) + '</h3><p>' + escapeHtml(tip.text) + '</p></article>').join('');
+    rotationTypeNav.innerHTML = rotationsData.rotations.map(rotation => '<button class="rotation-jump" type="button" data-target="rotation-' + escapeHtml(rotation.id) + '">' + escapeHtml(rotation.name) + '</button>').join('');
+    rotationGrid.innerHTML = rotationsData.rotations.map(rotation => {
+      const groups = rotation.groups.map(group => '<section class="rotation-group"><h3>' + escapeHtml(group.label) + '</h3><div class="rotation-roster">' + group.members.map(member => {
+        const sprite = rotationSprite(member);
+        const species = member.name.split(/\s+[?-]\s+/)[0].replace(/\s*?+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
+        const shiny = /^Shiny\s+/i.test(species);
+        const dexName = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(Psy|Bug)$/i, '').trim();
+        const dexMatch = pokedex.find(p => p.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + dexName).toLocaleLowerCase('en')) || pokedex.find(p => p.name.toLocaleLowerCase('en') === dexName.toLocaleLowerCase('en'));
+        return '<div class="rotation-pokemon">' + (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" data-pokemon-id="' + (dexMatch ? dexMatch.id : 0) + '" data-variant="' + (shiny ? 'shiny' : 'normal') + '" alt="" loading="lazy" decoding="async">' : '') + '<span>' + escapeHtml(member.name) + '</span></div>';
+      }).join('') + '</div></section>').join('');
+      const upgrades = rotation.improvements.length ? '<section class="rotation-group rotation-upgrades"><h3>Mejoras</h3><div class="rotation-tags">' + rotation.improvements.map(item => '<span>' + escapeHtml(item) + '</span>').join('') + '</div></section>' : '';
+      const proscons = rotation.strength || rotation.weakness ? '<div class="rotation-proscons">' + (rotation.strength ? '<div><h3>Ventajas</h3><p>' + escapeHtml(rotation.strength) + '</p></div>' : '') + (rotation.weakness ? '<div><h3>Desventajas</h3><p>' + escapeHtml(rotation.weakness) + '</p></div>' : '') + '</div>' : '';
+      return '<article class="rotation-card" id="rotation-' + escapeHtml(rotation.id) + '"><header><h2>' + escapeHtml(rotation.name) + '</h2>' + (rotation.status ? '<span class="rotation-status">Gu?a incompleta</span>' : '') + '</header>' + (rotation.intro ? '<p class="rotation-intro">' + escapeHtml(rotation.intro) + '</p>' : '') + groups + upgrades + proscons + '</article>';
+    }).join('');
+  }
+  rotationTypeNav.addEventListener('click', event => {
+    const button = event.target.closest('.rotation-jump');
+    if (!button) return;
+    document.getElementById(button.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  rotationGrid.addEventListener('error', event => {
+    if (event.target.matches('.rotation-sprite')) fallbackPokemonSprite(event.target);
+  }, true);
 
   function renderPokedex(){
     const query = pokedexSearch.value.trim().toLocaleLowerCase('es');
@@ -440,6 +486,7 @@
     if (event.target.matches('.dex-sprite')) fallbackPokemonSprite(event.target);
   }, true);
   pokemonDialogSprite.addEventListener('error', () => fallbackPokemonSprite(pokemonDialogSprite));
+  renderRotations();
   render();
 })();
 

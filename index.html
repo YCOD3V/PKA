@@ -25,6 +25,7 @@
       <nav class="section-tabs" role="tablist" aria-label="Secciones del sitio">
         <button class="section-tab active" id="homeTab" type="button" role="tab" aria-controls="homePanel" aria-selected="true">Inicio</button>
         <button class="section-tab" id="aboutTab" type="button" role="tab" aria-controls="aboutPanel" aria-selected="false" tabindex="-1">&#xBF;Qui&#xE9;nes somos?</button>
+        <button class="section-tab" id="rotationsTab" type="button" role="tab" aria-controls="rotationsPanel" aria-selected="false" tabindex="-1">Rotaciones</button>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones (Hunts)</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
@@ -115,6 +116,21 @@
         </div>
       </section>
 
+      <section class="page-panel rotations-panel" id="rotationsPanel" role="tabpanel" aria-labelledby="rotationsTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title" id="rotationsTitle">Rotaciones por elemento</h1>
+          <p class="subtitle" id="rotationsDescription"></p>
+        </header>
+        <div class="rotation-callout" id="rotationCaveat"></div>
+        <div class="rotation-guide-grid">
+          <section class="rotation-guide-card" id="rotationRequirements"></section>
+          <section class="rotation-guide-card" id="rotationTips"></section>
+        </div>
+        <nav class="rotation-type-nav" id="rotationTypeNav" aria-label="Ir a una rotaci?n por elemento"></nav>
+        <div class="rotation-grid" id="rotationGrid"></div>
+        <p class="rotation-source">Gu&#xED;a comunitaria de referencia. <a href="https://wiki-pokealliance-es.pages.dev/rotaciones" target="_blank" rel="noopener noreferrer">Ver fuente</a>. Las recomendaciones son situacionales y pueden cambiar con el juego.</p>
+      </section>
+
       <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Calculadora de ventajas</h1>
@@ -149,6 +165,7 @@
   </dialog>
   <script src="./js/hunts-data.js" defer></script>
   <script src="./js/pokedex-data.js" defer></script>
+  <script src="./js/rotaciones-data.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>

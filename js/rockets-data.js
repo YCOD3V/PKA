@@ -1,6 +1,6 @@
 (function(){
   const base='https://wiki-pokealliance-es.pages.dev/assets/pokelog-icons/';
-  const poke=(name,slug)=>({name,sprite:base+slug+'.webp'});
+  const poke=(name,slug)=>({name,sprite:slug.startsWith('https://') ? slug : base+slug+'.webp'});
   const row=(npc,npcSlug,recommended,recSlug,weaknesses)=>[
     poke(npc,npcSlug),poke(recommended,recSlug),weaknesses
   ];
@@ -78,7 +78,7 @@
       row('Shiny Scizor','shiny-scizor','Shiny Arcanine','shiny-arcanine',['fire'])
     ]},
     {number:'10',name:'Vortex',team:[
-      row('Shiny Ninetales','shiny-ninetales','Shiny Starmie','shiny-starmie',['water','ground','rock']),
+      row('Shiny Ninetales','https://play.pokemonshowdown.com/sprites/gen5-shiny/ninetales.png','Shiny Starmie','shiny-starmie',['water','ground','rock']),
       row('Shiny Magneton','shiny-magneton','Shiny Arcanine','shiny-arcanine',['fire','fighting','ground']),
       row('Shiny Kabutops','shiny-kabutops','Shiny Venusaur','shiny-venusaur',['grass','electric','fighting','ground']),
       row('Shiny Omastar','shiny-omastar','Shiny Raichu','shiny-raichu',['grass','electric','fighting','ground']),

@@ -57,14 +57,14 @@
       <section class="page-panel pokedex-panel" id="pokedexPanel" role="tabpanel" aria-labelledby="pokedexTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Pokédex <span class="title-mark">visual</span></h1>
-          <p class="subtitle">Explora los Pokémon disponibles y filtra por nombre, tipo o categoría.</p>
+          <p class="subtitle">Explora los Pokémon disponibles y filtra por nombre, tipo o Tier.</p>
         </header>
         <div class="dex-toolbar">
           <label class="dex-search">Nombre
             <input id="pokedexSearch" type="search" placeholder="Filtrar Pokémon por nombre…" autocomplete="off">
           </label>
-          <label class="filter-label">Categoría
-            <select id="pokedexTier" class="filter-select"><option value="">Todas las categorías</option></select>
+          <label class="filter-label">Tier
+            <select id="pokedexTier" class="filter-select"><option value="">Todos los Tiers</option></select>
           </label>
           <label class="filter-label">Tipo
             <select id="pokedexType" class="filter-select"><option value="">Todos los tipos</option></select>
@@ -72,7 +72,7 @@
           <button class="dex-clear" id="pokedexClear" type="button">Limpiar filtros</button>
           <span class="dex-count" id="pokedexCount" aria-live="polite"></span>
         </div>
-        <p class="dex-data-note">Catálogo de PokeAlliance: 910 registros de Pokémon normales y Shiny, con sus categorías y tipos del juego.</p>
+        <p class="dex-data-note">Catálogo de PokeAlliance: 910 registros de Pokémon normales y Shiny, con sus Tiers y tipos del juego.</p>
         <div class="pokedex-grid" id="pokedexGrid"></div>
         <p class="empty-results" id="pokedexEmpty" hidden>No hay Pokémon que coincidan con esos filtros.</p>
       </section>

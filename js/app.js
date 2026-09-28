@@ -329,6 +329,10 @@
     const match = String(value || '').match(/\d+/);
     return match ? 'Categoría ' + match[0] : (value ? 'Categoría ' + value : 'Sin categoría');
   }
+  function tierLabel(value){
+    const match = String(value || '').match(/\d+/);
+    return match ? 'Tier ' + match[0] : (value ? 'Tier ' + value : 'Sin Tier');
+  }
   function pokemonDisplayName(name){
     return String(name || '');
   }
@@ -517,7 +521,7 @@
     pokemonDialogSprite.classList.remove('sprite-missing');
     pokemonDialogSprite.src = sprite || (pokemon ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (shiny ? 'shiny/' : '') + pokemon.id + '.png' : '');
     pokemonDialogSprite.alt = rotationLabel(species);
-    pokemonDialogInfo.textContent = pokemon ? [(pokemon.typeLabels || []).join(' / '), pokemon.tier ? categoryLabel(pokemon.tier) : 'Categoría especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0')].filter(Boolean).join(' · ') : 'Pokémon recomendado en las rotaciones';
+    pokemonDialogInfo.textContent = pokemon ? [(pokemon.typeLabels || []).join(' / '), pokemon.tier ? tierLabel(pokemon.tier) : 'Tier especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0')].filter(Boolean).join(' · ') : 'Pokémon recomendado en las rotaciones';
     selectedHuntRecord = (pokemon && hunts.find(entry => Number(entry.id) === Number(pokemon.id))) ||
       hunts.find(entry => entry.name.toLocaleLowerCase('es') === baseName.toLocaleLowerCase('es')) || null;
     pokemonDialogLocations.innerHTML = '<h3>Mapas de localización</h3>' + (selectedHuntRecord
@@ -559,7 +563,7 @@
         '<span class="dex-sprite-wrap"><img class="dex-sprite" src="' + escapeHtml(pokemon.sprite) + '" data-pokemon-id="' + pokemon.id + '" data-variant="' + escapeHtml(pokemon.variant) + '" alt="" loading="lazy" decoding="async"></span>' +
         '<span class="dex-info"><span class="dex-name">' + escapeHtml(pokemonDisplayName(pokemon.name)) + '</span>' +
         '<span class="dex-meta">' + pokemon.typeLabels.map(label => '<span class="dex-type">' + escapeHtml(label) + '</span>').join('') +
-        (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(categoryLabel(pokemon.tier)) + '</span>' : '') + '<span class="dex-tier">Generación ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' · Shiny' : '') + '</span></span></span></button>';
+        (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(tierLabel(pokemon.tier)) + '</span>' : '') + '<span class="dex-tier">Generación ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' · Shiny' : '') + '</span></span></span></button>';
     }).join('');
     pokedexCount.textContent = filtered.length.toLocaleString('es') + ' Pokémon';
     pokedexEmpty.hidden = filtered.length > 0;
@@ -570,7 +574,7 @@
     .forEach(tier => {
       const option = document.createElement('option');
       option.value = tier;
-      option.textContent = categoryLabel(tier);
+      option.textContent = tierLabel(tier);
       pokedexTier.appendChild(option);
     });
   Array.from(new Map(pokedex.flatMap(pokemon => pokemon.types.map((type, index) => [type, pokemon.typeLabels[index]]))).entries())
@@ -602,7 +606,7 @@
     pokemonDialogSprite.classList.remove('sprite-missing');
     pokemonDialogSprite.src = pokemon.sprite;
     pokemonDialogSprite.alt = pokemon.name;
-    pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? categoryLabel(pokemon.tier) : 'Categoría especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generación ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Shiny' : 'Normal'].filter(Boolean).join(' · ');
+    pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? tierLabel(pokemon.tier) : 'Tier especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generación ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Shiny' : 'Normal'].filter(Boolean).join(' · ');
     const baseName = pokemon.name.replace(/^Shiny\s+/i, '').toLocaleLowerCase('es');
     selectedHuntRecord = hunts.find(entry => Number(entry.id) === Number(pokemon.id)) ||
       hunts.find(entry => entry.name.toLocaleLowerCase('es') === baseName) || null;

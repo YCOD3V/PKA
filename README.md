@@ -14,19 +14,3 @@ Sitio estático en español con cuatro secciones: **Inicio**, **Pokédex**, **Lo
 ## Datos de la Pokédex
 
 El catálogo local contiene **910 registros** de la [API pública de Alliance PokeTibia Wiki](https://wiki.pokealliance.com/api/pokemon), incluidos Pokémon normales y variocolor. La consulta usada registró 88 entradas Tier 1. Los sprites proceden de la wiki y requieren conexión a internet; el sitio no consulta la API al ejecutarse.
-
-## Ejecutar
-
-Abre `index.html` en el navegador. No requiere dependencias ni compilación.
-
-## GitHub Pages
-
-1. Crea un repositorio y sube los archivos del proyecto.
-2. En **Settings → Pages**, configura el despliegue desde la rama principal y la carpeta raíz.
-3. Guarda los cambios y espera a que GitHub publique el sitio.
-
-## Vercel
-
-Importa el repositorio desde GitHub. Selecciona **Other** como framework, deja vacíos el comando de compilación y el directorio de salida, y despliega. No hace falta `vercel.json`.
-
-CSS, JavaScript e imágenes locales usan rutas relativas. Las vistas se controlan con fragmentos (`#home`, `#pokedex`, `#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.

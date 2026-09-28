@@ -558,3 +558,40 @@
 .rotation-source{margin:12px 2px 0;color:var(--text-faint);font-size:10px}
 @media(max-width:900px){.rotation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.rotation-guide-grid,.rotation-grid{grid-template-columns:1fr}.rotation-card{padding:13px}.section-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Rotations: improve hierarchy and readability on desktop and mobile. */
+.rotations-panel{max-width:1180px;margin-inline:auto}
+.rotations-panel>.page-header{margin-bottom:18px}
+.rotations-panel .subtitle{max-width:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rotation-callout{padding:15px 18px;margin-bottom:16px;font-size:13px;line-height:1.65}
+.rotation-guide-grid{grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:16px;margin-bottom:16px}
+.rotation-guide-card{padding:20px;font-size:12px;line-height:1.7}
+.rotation-guide-card h2,.rotation-guide-card h3{font-size:17px}
+#rotationTips{display:grid;align-content:start;gap:14px}
+#rotationTips article+article{padding-top:14px;border-top:1px solid var(--border)}
+.rotation-type-nav{position:sticky;top:10px;z-index:3;gap:8px;margin-bottom:18px;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.24)}
+.rotation-jump{padding:8px 12px;font-size:11px}
+.rotation-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
+.rotation-card{padding:19px;scroll-margin-top:76px}
+.rotation-card>header{min-height:38px;margin-bottom:14px}
+.rotation-card>header h2{font-size:19px;letter-spacing:.025em}
+.rotation-group{margin-top:14px}
+.rotation-group h3,.rotation-proscons h3{font-size:10px}
+.rotation-roster{gap:7px}
+.rotation-pokemon{gap:8px;padding:6px 9px;font-size:11px;line-height:1.4}
+.rotation-sprite{width:32px;height:32px}
+.rotation-tags{gap:7px}
+.rotation-tags span{padding:6px 9px;font-size:10px}
+.rotation-proscons{gap:14px;margin-top:14px;padding-top:13px}
+.rotation-proscons p{font-size:11px;line-height:1.6}
+.rotation-source{margin-top:16px;font-size:11px}
+@media(max-width:800px){
+  .rotations-panel .subtitle{white-space:normal;overflow:visible}
+  .rotation-guide-grid{grid-template-columns:1fr}
+  .rotation-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .rotation-card{padding:15px}
+  .rotation-type-nav{position:static}
+  .rotation-proscons{grid-template-columns:1fr}
+}

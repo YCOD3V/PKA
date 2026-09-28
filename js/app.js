@@ -338,6 +338,18 @@
   mapDialog.addEventListener('close', () => { mapDialogImage.removeAttribute('src'); });
 
   renderHunts();
+  function fallbackPokemonSprite(image){
+    if (image.dataset.fallbackAttempted === 'true') {
+      image.classList.add('sprite-missing');
+      return;
+    }
+    image.dataset.fallbackAttempted = 'true';
+    const id = Number(image.dataset.pokemonId);
+    const shiny = image.dataset.variant === 'shiny';
+    image.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' +
+      (shiny ? 'shiny/' : '') + id + '.png';
+  }
+
   function renderPokedex(){
     const query = pokedexSearch.value.trim().toLocaleLowerCase('es');
     const tier = pokedexTier.value;
@@ -351,7 +363,7 @@
     pokedexGrid.innerHTML = filtered.map(pokemon => {
       const typeClass = pokemon.types.length ? ' type-' + escapeHtml(pokemon.types[0]) : '';
       return '<button class="dex-card' + typeClass + '" type="button" data-name="' + escapeHtml(pokemon.name) + '">' +
-        '<span class="dex-sprite-wrap"><img class="dex-sprite" src="' + escapeHtml(pokemon.sprite) + '" alt="" loading="lazy" decoding="async"></span>' +
+        '<span class="dex-sprite-wrap"><img class="dex-sprite" src="' + escapeHtml(pokemon.sprite) + '" data-pokemon-id="' + pokemon.id + '" data-variant="' + escapeHtml(pokemon.variant) + '" alt="" loading="lazy" decoding="async"></span>' +
         '<span class="dex-info"><span class="dex-name">' + escapeHtml(pokemon.name) + '</span>' +
         '<span class="dex-meta">' + pokemon.typeLabels.map(label => '<span class="dex-type">' + escapeHtml(label) + '</span>').join('') +
         (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(pokemon.tier) + '</span>' : '') + '<span class="dex-tier">Gen. ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' \u00b7 Shiny' : '') + '</span></span></span></button>';
@@ -391,6 +403,10 @@
     const pokemon = pokedex.find(entry => entry.name === card.dataset.name);
     if (!pokemon) return;
     pokemonDialogName.textContent = pokemon.name;
+    pokemonDialogSprite.dataset.pokemonId = pokemon.id;
+    pokemonDialogSprite.dataset.variant = pokemon.variant;
+    pokemonDialogSprite.dataset.fallbackAttempted = 'false';
+    pokemonDialogSprite.classList.remove('sprite-missing');
     pokemonDialogSprite.src = pokemon.sprite;
     pokemonDialogSprite.alt = pokemon.name;
     pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? 'Tier ' + pokemon.tier : 'Tier especial/sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generaci\u00f3n ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Shiny' : 'Normal'].filter(Boolean).join(' · ');
@@ -419,8 +435,9 @@
     renderHunts();
   });
   pokedexGrid.addEventListener('error', event => {
-    if (event.target.matches('.dex-sprite')) event.target.classList.add('sprite-missing');
+    if (event.target.matches('.dex-sprite')) fallbackPokemonSprite(event.target);
   }, true);
+  pokemonDialogSprite.addEventListener('error', () => fallbackPokemonSprite(pokemonDialogSprite));
   render();
 })();
 

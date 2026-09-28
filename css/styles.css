@@ -496,3 +496,15 @@
 .pokemon-location-row .map-link img{display:block;width:70px;height:42px;object-fit:cover;border:1px solid var(--border);border-radius:6px}
 .pokemon-location-row .map-link:hover img{border-color:var(--accent);box-shadow:0 0 10px rgba(229,9,20,.25)}
 .location-empty{color:var(--text-faint);font-size:11px}
+
+/* Vistas de ancho uniforme y descripciones en una sola linea. */
+.stage[data-view="home"],
+.stage[data-view="pokedex"],
+.stage[data-view="calculator"]{max-width:720px}
+.page-header .subtitle{max-width:none;white-space:nowrap;font-size:clamp(10px,1.9vw,13.5px);line-height:1.45}
+.calculator-panel .grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+@media(max-width:620px){
+  .page-header .subtitle{font-size:clamp(9px,2.55vw,12px)}
+  .calculator-panel .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+}
+@media(max-width:360px){.page-header .subtitle{white-space:normal}}

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Consulta localizaciones de caza y ventajas de tipos Pokémon en una interfaz inspirada en Akatsuki.">
   <meta name="theme-color" content="#0b0b0b">
-  <title>The Akatsuki | Hunts y calculadora de ventajas</title>
+  <title>The Akatsuki | mapas, Pokédex y calculadora de ventajas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap">
@@ -27,7 +27,7 @@
         <button class="section-tab" id="aboutTab" type="button" role="tab" aria-controls="aboutPanel" aria-selected="false" tabindex="-1">&#xBF;Qui&#xE9;nes somos?</button>
         <button class="section-tab" id="rotationsTab" type="button" role="tab" aria-controls="rotationsPanel" aria-selected="false" tabindex="-1">Rotaciones</button>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
-        <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones (Hunts)</button>
+        <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
       </nav>
 
@@ -40,14 +40,14 @@
       <section class="page-panel pokedex-panel" id="pokedexPanel" role="tabpanel" aria-labelledby="pokedexTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Pokédex <span class="title-mark">visual</span></h1>
-          <p class="subtitle">Explora los Pokémon disponibles y filtra por nombre, tipo o tier.</p>
+          <p class="subtitle">Explora los Pokémon disponibles y filtra por nombre, tipo o categoría.</p>
         </header>
         <div class="dex-toolbar">
           <label class="dex-search">Nombre
             <input id="pokedexSearch" type="search" placeholder="Filtrar Pokémon por nombre…" autocomplete="off">
           </label>
-          <label class="filter-label">Tier
-            <select id="pokedexTier" class="filter-select"><option value="">Todos los tiers</option></select>
+          <label class="filter-label">Categoría
+            <select id="pokedexTier" class="filter-select"><option value="">Todas las categorías</option></select>
           </label>
           <label class="filter-label">Tipo
             <select id="pokedexType" class="filter-select"><option value="">Todos los tipos</option></select>
@@ -55,14 +55,14 @@
           <button class="dex-clear" id="pokedexClear" type="button">Limpiar filtros</button>
           <span class="dex-count" id="pokedexCount" aria-live="polite"></span>
         </div>
-        <p class="dex-data-note">Cat&#xE1;logo de PokeAlliance: 910 registros de Pok&#xE9;mon normales y variocolor, con sus tiers y tipos del juego.</p>
+        <p class="dex-data-note">Cat&#xE1;logo de PokeAlliance: 910 registros de Pokémon normales y variocolor, con sus categorías y tipos del juego.</p>
         <div class="pokedex-grid" id="pokedexGrid"></div>
         <p class="empty-results" id="pokedexEmpty" hidden>No hay Pokémon que coincidan con esos filtros.</p>
       </section>
       <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0" hidden>
         <header class="header page-header">
-          <h1 class="title">Localizaciones <span class="title-mark">(Hunts)</span></h1>
-          <p class="subtitle">Busca un Pokémon, revisa su tier y abre el mapa de cada zona de caza.</p>
+          <h1 class="title">Localizaciones</h1>
+          <p class="subtitle">Busca un Pokémon, revisa su categoría y abre el mapa de cada zona de caza.</p>
         </header>
         <div class="hunt-toolbar">
           <label class="hunt-search">
@@ -75,7 +75,7 @@
           <label class="filter-label">Zona
             <select id="zoneFilter" class="filter-select">
               <option value="">Todas las zonas</option>
-              <option value="normal">Hunt normal</option>
+              <option value="normal">Cacería normal</option>
               <option value="wildscape">Wildscape (150+)</option>
               <option value="hoenn">Hoenn (250+)</option>
             </select>
@@ -84,7 +84,7 @@
         </div>
         <div class="hunt-table-wrap">
           <table class="hunt-table">
-            <thead><tr><th scope="col">Pokémon</th><th scope="col">Categoría</th><th scope="col">Hunt normal</th><th scope="col">Wildscape (150+)</th><th scope="col">Hoenn (250+)</th></tr></thead>
+            <thead><tr><th scope="col">Pokémon</th><th scope="col">Categoría</th><th scope="col">Cacería normal</th><th scope="col">Wildscape (150+)</th><th scope="col">Hoenn (250+)</th></tr></thead>
             <tbody id="huntRows"></tbody>
           </table>
           <p class="empty-results" id="huntEmpty" hidden>No se encontraron Pokémon con esos filtros.</p>
@@ -168,5 +168,3 @@
   <script src="./js/app.js" defer></script>
 </body>
 </html>
-
-

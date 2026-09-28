@@ -525,6 +525,7 @@
 .about-role{padding:13px;border:1px solid var(--border-soft);border-radius:10px;background:rgba(0,0,0,.18)}
 .about-role h3{margin:0 0 7px;color:var(--accent);font:700 11px var(--font-body);letter-spacing:.08em;text-transform:uppercase}
 .about-role p{margin:0;color:var(--text);font-weight:600}
+.about-role-sprite{display:block;width:76px;height:76px;margin:12px auto 0;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 9px rgba(229,9,20,.22))}
 @media(max-width:680px){.about-grid{grid-template-columns:1fr}.about-roles{grid-template-columns:1fr 1fr}.about-role-trainers{grid-column:1/-1}}
 @media(max-width:420px){.about-roles{grid-template-columns:1fr}}
 
@@ -609,3 +610,7 @@
 .rotation-tip h3{margin-bottom:5px}
 .rotation-tip p{line-height:1.6}
 .rotation-card .rotation-roster .rotation-pokemon{min-height:43px}
+.rotation-dialog{width:min(880px,94vw)}
+.rotation-dialog-content{padding:16px;overflow:auto}
+.rotation-dialog-card{max-width:none;margin:0;background:transparent}
+@media(max-width:620px){.rotation-dialog{width:96vw}.rotation-dialog-content{padding:10px}}

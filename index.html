@@ -55,7 +55,7 @@
           <button class="dex-clear" id="pokedexClear" type="button">Limpiar filtros</button>
           <span class="dex-count" id="pokedexCount" aria-live="polite"></span>
         </div>
-        <p class="dex-data-note">Cat&#xE1;logo de PokeAlliance: 910 registros de Pokémon normales y variocolor, con sus categorías y tipos del juego.</p>
+        <p class="dex-data-note">Catálogo de PokeAlliance: 910 registros de Pokémon normales y Shiny, con sus categorías y tipos del juego.</p>
         <div class="pokedex-grid" id="pokedexGrid"></div>
         <p class="empty-results" id="pokedexEmpty" hidden>No hay Pokémon que coincidan con esos filtros.</p>
       </section>
@@ -108,8 +108,8 @@
           <section class="about-card about-card-structure">
             <h2>Estructura del clan</h2>
             <div class="about-roles">
-              <div class="about-role"><h3>L&#xED;der</h3><p>ElCheoCL</p></div>
-              <div class="about-role"><h3>Vicel&#xED;deres</h3><p>Driel<br>Kamfabelic<br>Enigmatic Drako</p></div>
+              <div class="about-role"><h3>L&#xED;der</h3><p>ElCheoCL</p><img class="about-role-sprite" src="https://img.pokemondb.net/sprites/black-white/anim/normal/charizard.gif" alt="Charizard animado" loading="lazy" decoding="async"></div>
+              <div class="about-role"><h3>Vicel&#xED;deres</h3><p>Driel<br>Kamfabelic<br>Enigmatic Drako</p><img class="about-role-sprite" src="https://img.pokemondb.net/sprites/black-white/anim/normal/gengar.gif" alt="Gengar animado" loading="lazy" decoding="async"></div>
               <div class="about-role about-role-trainers"><h3>Entrenadores</h3><p>Lumina, Taro Pro, Rruso, Daniiel Style, Jota Vnzla, Enigmatic Drako, Mamgarroy, Monkeeyz, Bati, Lady Toxyk, Frijolito, Roberthsonap, Diogogarchs, Charizardo, Tarzank, Luffy Copipe, Trild, Residentevil, Sunmaster, Darkille, Jake Nozaen, Zmwiv</p></div>
             </div>
           </section>
@@ -127,7 +127,7 @@
         </div>
         <nav class="rotation-type-nav" id="rotationTypeNav" aria-label="Ir a una rotaci&#xF3;n por elemento"></nav>
         <div class="rotation-grid" id="rotationGrid"></div>
-        <p class="rotation-source">Gu&#xED;a comunitaria de referencia. <a href="https://wiki-pokealliance-es.pages.dev/rotaciones" target="_blank" rel="noopener noreferrer">Ver fuente</a>. Las recomendaciones son situacionales y pueden cambiar con el juego.</p>
+        <p class="rotation-source">(Créditos: <a href="https://docs.google.com/document/d/1mVsLDJnSddFdjA3r_Gm66L9E5VVb1nAm/edit" target="_blank" rel="noopener noreferrer">Shaolin Pig Slayer - MOON</a>)</p>
       </section>
 
       <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>
@@ -152,6 +152,14 @@
       <button class="map-dialog-close" id="mapDialogClose" type="button" aria-label="Cerrar mapa">&times;</button>
     </div>
     <div class="map-dialog-image-wrap"><img id="mapDialogImage" alt="Mapa de localización ampliado"></div>
+  </dialog>
+
+  <dialog class="map-dialog rotation-dialog" id="rotationDialog" aria-labelledby="rotationDialogTitle">
+    <div class="map-dialog-header">
+      <h2 id="rotationDialogTitle">Rotación elemental</h2>
+      <button class="map-dialog-close" id="rotationDialogClose" type="button" aria-label="Cerrar rotación">&times;</button>
+    </div>
+    <div class="rotation-dialog-content" id="rotationDialogContent"></div>
   </dialog>
 
   <dialog class="pokemon-dialog" id="pokemonDialog" aria-labelledby="pokemonDialogName">

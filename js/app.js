@@ -282,7 +282,7 @@
     return match ? 'Categoría ' + match[0] : (value ? 'Categoría ' + value : 'Sin categoría');
   }
   function pokemonDisplayName(name){
-    return String(name || '').replace(/^Shiny\s+/i, 'Variocolor ');
+    return String(name || '');
   }
 
   function renderLocation(entry, pokemonName, zone){
@@ -365,10 +365,13 @@
   const rotationGrid = document.getElementById('rotationGrid');
   const rotationTypeNav = document.getElementById('rotationTypeNav');
   const rotationTips = document.getElementById('rotationTips');
+  const rotationDialog = document.getElementById('rotationDialog');
+  const rotationDialogTitle = document.getElementById('rotationDialogTitle');
+  const rotationDialogContent = document.getElementById('rotationDialogContent');
   function rotationPokemonInfo(name){
     const label = String(name || '').split(/\s+(?:\u2014|-)\s+/)[0].replace(/\([^)]*\)/g, '').replace(/[★☆]+/g, '').trim();
-    const shiny = /^(?:Shiny|Variocolor)\s+/i.test(label);
-    const species = label.replace(/^(?:Shiny|Variocolor)\s+/i, '').trim();
+    const shiny = /^Shiny\s+/i.test(label);
+    const species = label.replace(/^Shiny\s+/i, '').trim();
     const formBase = species.replace(/\s+(?:Ice|Snow|Electric|Fire|Bug|Psy|Dark|Dragon|Fairy|Fighting|Flying|Ghost|Grass|Ground|Normal|Poison|Psychic|Rock|Steel|Water)$/i, '').trim();
     const names = [label, species, species.replace(/^Mega\s+/i, ''), formBase];
     if (shiny) names.push('Shiny ' + species, 'Shiny ' + species.replace(/^Mega\s+/i, ''), 'Shiny ' + formBase);
@@ -380,8 +383,7 @@
     return huntPokemon ? {...huntPokemon, sprite:'', variant: shiny ? 'shiny' : 'normal', typeLabels: []} : null;
   }
   function rotationLabel(name){
-    return String(name).replace(/^Shiny\s+/i, 'Variocolor ')
-      .replace(/\(Offtank\)/gi, '(tanque secundario)')
+    return String(name).replace(/\(Offtank\)/gi, '(tanque secundario)')
       .replace(/\s+—\s+SR\b/g, ' — Superraro')
       .replace(/\s+—\s+T([1-4])\b/g, ' — Tier $1')
       .replace(/\bT([1-4])\b/g, 'Tier $1').replace(/\bCD\b/g, 'recarga')
@@ -421,7 +423,10 @@
         (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" data-pokemon-id="' + (info ? info.id : 0) + '" data-variant="' + (info ? info.variant : 'normal') + '" alt="" loading="lazy" decoding="async">' : '') +
         '<div><h3>' + escapeHtml(rotationLabel(tip.name)) + '</h3><p>' + escapeHtml(text) + '</p></div></article>';
     }).join('');
-    rotationTypeNav.innerHTML = rotationsData.rotations.map(rotation => '<button class="rotation-jump" type="button" aria-expanded="false" aria-controls="rotation-' + escapeHtml(rotation.id) + '" data-target="rotation-' + escapeHtml(rotation.id) + '">' + escapeHtml(rotation.name) + '</button>').join('');
+    const shortcuts = rotationsData.rotations.flatMap(rotation => rotation.id === 'dark-ghost'
+      ? [{...rotation, name:'Siniestro'}, {...rotation, name:'Fantasma'}]
+      : [rotation]);
+    rotationTypeNav.innerHTML = shortcuts.map(rotation => '<button class="rotation-jump" type="button" aria-haspopup="dialog" aria-controls="rotationDialogContent" data-target="rotation-' + escapeHtml(rotation.id) + '">' + escapeHtml(rotation.name) + '</button>').join('');
     rotationGrid.innerHTML = rotationsData.rotations.map(rotation => {
       const groups = rotation.groups.map(group => '<section class="rotation-group"><h3>' + escapeHtml(group.label) + '</h3><div class="rotation-roster">' + group.members.map(member => {
         const sprite = rotationSprite(member);
@@ -444,20 +449,18 @@
     const button = event.target.closest('.rotation-jump');
     if (!button) return;
     const target = document.getElementById(button.dataset.target);
-    const wasOpen = button.getAttribute('aria-expanded') === 'true';
-    rotationGrid.querySelectorAll('.rotation-card').forEach(card => { card.hidden = true; });
-    rotationTypeNav.querySelectorAll('.rotation-jump').forEach(item => item.setAttribute('aria-expanded', 'false'));
-    if (!wasOpen && target) {
-      target.hidden = false;
-      button.setAttribute('aria-expanded', 'true');
-      target.scrollIntoView({behavior:'smooth',block:'start'});
-    }
+    if (!target) return;
+    rotationDialogTitle.textContent = button.textContent.trim();
+    rotationDialogContent.innerHTML = '<article class="rotation-card rotation-dialog-card">' + target.innerHTML + '</article>';
+    rotationDialog.showModal();
   });
+  document.getElementById('rotationDialogClose').addEventListener('click', () => rotationDialog.close());
+  rotationDialog.addEventListener('click', event => { if (event.target === rotationDialog) rotationDialog.close(); });
   function openRotationPokemon(name){
     const pokemon = rotationPokemonInfo(name);
     const species = pokemon ? pokemon.name : name.split(/\s+(?:\u2014|-)\s+/)[0].replace(/\([^)]*\)/g, '').replace(/[★☆]+/g, '').trim();
-    const shiny = pokemon ? pokemon.variant === 'shiny' : /^(?:Shiny|Variocolor)\s+/i.test(species);
-    const baseName = species.replace(/^(?:Shiny|Variocolor)\s+/i, '').replace(/^Mega\s+/i, '').trim();
+    const shiny = pokemon ? pokemon.variant === 'shiny' : /^Shiny\s+/i.test(species);
+    const baseName = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').trim();
     const sprite = pokemon ? pokemon.sprite : rotationSprite({name, sprite:''});
     pokemonDialogName.textContent = rotationLabel(species);
     pokemonDialogSprite.dataset.pokemonId = pokemon ? pokemon.id : '0';
@@ -478,11 +481,14 @@
     pokemonDialogHunt.textContent = hasMaps ? 'Ver en Localizaciones' : 'Sin datos de localización';
     pokemonDialog.showModal();
   }
-  [rotationGrid, rotationTips].forEach(container => container.addEventListener('click', event => {
+  [rotationGrid, rotationTips, rotationDialogContent].forEach(container => container.addEventListener('click', event => {
     const item = event.target.closest('[data-pokemon]');
     if (item) openRotationPokemon(item.dataset.pokemon);
   }));
   rotationGrid.addEventListener('error', event => {
+    if (event.target.matches('.rotation-sprite')) fallbackPokemonSprite(event.target);
+  }, true);
+  rotationDialogContent.addEventListener('error', event => {
     if (event.target.matches('.rotation-sprite')) fallbackPokemonSprite(event.target);
   }, true);
   rotationTips.addEventListener('error', event => {
@@ -505,7 +511,7 @@
         '<span class="dex-sprite-wrap"><img class="dex-sprite" src="' + escapeHtml(pokemon.sprite) + '" data-pokemon-id="' + pokemon.id + '" data-variant="' + escapeHtml(pokemon.variant) + '" alt="" loading="lazy" decoding="async"></span>' +
         '<span class="dex-info"><span class="dex-name">' + escapeHtml(pokemonDisplayName(pokemon.name)) + '</span>' +
         '<span class="dex-meta">' + pokemon.typeLabels.map(label => '<span class="dex-type">' + escapeHtml(label) + '</span>').join('') +
-        (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(categoryLabel(pokemon.tier)) + '</span>' : '') + '<span class="dex-tier">Generación ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' · Variocolor' : '') + '</span></span></span></button>';
+        (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(categoryLabel(pokemon.tier)) + '</span>' : '') + '<span class="dex-tier">Generación ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' · Shiny' : '') + '</span></span></span></button>';
     }).join('');
     pokedexCount.textContent = filtered.length.toLocaleString('es') + ' Pokémon';
     pokedexEmpty.hidden = filtered.length > 0;
@@ -548,7 +554,7 @@
     pokemonDialogSprite.classList.remove('sprite-missing');
     pokemonDialogSprite.src = pokemon.sprite;
     pokemonDialogSprite.alt = pokemon.name;
-    pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? categoryLabel(pokemon.tier) : 'Categoría especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generación ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Variocolor' : 'Normal'].filter(Boolean).join(' · ');
+    pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? categoryLabel(pokemon.tier) : 'Categoría especial o sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generación ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Shiny' : 'Normal'].filter(Boolean).join(' · ');
     const baseName = pokemon.name.replace(/^Shiny\s+/i, '').toLocaleLowerCase('es');
     selectedHuntRecord = hunts.find(entry => Number(entry.id) === Number(pokemon.id)) ||
       hunts.find(entry => entry.name.toLocaleLowerCase('es') === baseName) || null;

@@ -1,6 +1,6 @@
 # The Akatsuki — Pokédex, Hunts y calculadora
 
-Sitio estático en español con seis secciones: **Inicio**, **¿Quiénes somos?**, **Rotaciones**, **Pokédex**, **Localizaciones (Hunts)** y **Calculadora de ventajas**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
+Sitio estático en español con seis secciones: **Inicio**, **¿Quiénes somos?**, **Rotaciones**, **Pokédex**, **Localizaciones** y **Calculadora de ventajas**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
 
 ## Estructura
 
@@ -14,7 +14,7 @@ Sitio estático en español con seis secciones: **Inicio**, **¿Quiénes somos?*
 
 ## Datos de la Pokédex y rotaciones
 
-El catálogo local contiene **910 registros** de la [API pública de Alliance PokeTibia Wiki](https://wiki.pokealliance.com/api/pokemon), incluidos Pokémon normales y variocolor. La consulta usada registró 88 entradas Tier 1. Los sprites de rotaciones se enlazan desde la guía comunitaria de referencia; el sitio no consulta APIs para construir sus vistas.
+El catálogo local contiene **910 registros** de la [API pública de Alliance PokeTibia Wiki](https://wiki.pokealliance.com/api/pokemon), incluidos Pokémon normales y Shiny. La consulta usada registró 88 entradas de Categoría 1. Los sprites de rotaciones se enlazan desde la guía comunitaria de referencia; el sitio no consulta APIs para construir sus vistas.
 
 ## Ejecutar
 

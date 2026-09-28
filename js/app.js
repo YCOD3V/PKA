@@ -1,4 +1,4 @@
-﻿(function(){
+(function(){
   const ICONS = {
     normal: '<circle cx="12" cy="12" r="7.2"/><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/>',
     fire: '<path d="M12 2c1.3 4-2.7 5.2-2.9 8.8-.1 1.7 1.3 3.1 3 3.1s3-1.3 3-3c0-1.6-1-2.4-1-2.4s1.8.9 1.8 3.6A4.8 4.8 0 0 1 11.9 17a5 5 0 0 1-5-5.2C7.1 7.3 10.3 5.7 12 2Z" fill="currentColor"/>',
@@ -196,19 +196,36 @@
 
   const app = document.getElementById('app');
   const homeTab = document.getElementById('homeTab');
+  const pokedexTab = document.getElementById('pokedexTab');
   const huntsTab = document.getElementById('huntsTab');
   const calculatorTab = document.getElementById('calculatorTab');
   const homePanel = document.getElementById('homePanel');
+  const pokedexPanel = document.getElementById('pokedexPanel');
   const huntsPanel = document.getElementById('huntsPanel');
   const calculatorPanel = document.getElementById('calculatorPanel');
-  const tabs = [homeTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, hunts: huntsPanel, calculator: calculatorPanel };
+  const tabs = [homeTab, pokedexTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
   const huntRows = document.getElementById('huntRows');
   const huntCount = document.getElementById('huntCount');
   const huntEmpty = document.getElementById('huntEmpty');
+  const pokedexSearch = document.getElementById('pokedexSearch');
+  const pokedexTier = document.getElementById('pokedexTier');
+  const pokedexType = document.getElementById('pokedexType');
+  const pokedexGrid = document.getElementById('pokedexGrid');
+  const pokedexCount = document.getElementById('pokedexCount');
+  const pokedexEmpty = document.getElementById('pokedexEmpty');
+  const pokedexClear = document.getElementById('pokedexClear');
+  const pokemonDialog = document.getElementById('pokemonDialog');
+  const pokemonDialogSprite = document.getElementById('pokemonDialogSprite');
+  const pokemonDialogName = document.getElementById('pokemonDialogName');
+  const pokemonDialogInfo = document.getElementById('pokemonDialogInfo');
+  const pokemonDialogLocations = document.getElementById('pokemonDialogLocations');
+  let selectedHuntRecord = null;
+  const pokemonDialogHunt = document.getElementById('pokemonDialogHunt');
+  const pokedex = Array.isArray(window.POKEDEX_DATA) ? window.POKEDEX_DATA : [];
   const mapDialog = document.getElementById('mapDialog');
   const mapDialogTitle = document.getElementById('mapDialogTitle');
   const mapDialogImage = document.getElementById('mapDialogImage');
@@ -233,7 +250,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -246,7 +263,7 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }
@@ -302,15 +319,18 @@
   tierFilter.addEventListener('change', renderHunts);
   zoneFilter.addEventListener('change', renderHunts);
 
-  huntRows.addEventListener('click', event => {
+  function openMapFromLink(link){
+    const preview = link.querySelector('img');
+    mapDialogTitle.textContent = preview ? preview.alt.replace(/^.*?\u2014 /, '') : 'Mapa de localizaci\u00f3n';
+    mapDialogImage.src = link.href;
+    mapDialog.showModal();
+  }
+  [huntRows, pokemonDialogLocations].forEach(container => container.addEventListener('click', event => {
     const link = event.target.closest('.map-link');
     if (!link) return;
     event.preventDefault();
-    const preview = link.querySelector('img');
-    mapDialogTitle.textContent = preview ? preview.alt.replace(/^.*? — /, '') : 'Mapa de localización';
-    mapDialogImage.src = link.href;
-    mapDialog.showModal();
-  });
+    openMapFromLink(link);
+  }));
   mapDialogClose.addEventListener('click', () => mapDialog.close());
   mapDialog.addEventListener('click', event => {
     if (event.target === mapDialog) mapDialog.close();
@@ -318,8 +338,92 @@
   mapDialog.addEventListener('close', () => { mapDialogImage.removeAttribute('src'); });
 
   renderHunts();
+  function renderPokedex(){
+    const query = pokedexSearch.value.trim().toLocaleLowerCase('es');
+    const tier = pokedexTier.value;
+    const type = pokedexType.value;
+    const filtered = pokedex.filter(pokemon => {
+      const matchesName = !query || (pokemon.name + ' ' + pokemon.id).toLocaleLowerCase('es').includes(query);
+      const matchesTier = !tier || pokemon.tier === tier;
+      const matchesType = !type || pokemon.types.includes(type);
+      return matchesName && matchesTier && matchesType;
+    });
+    pokedexGrid.innerHTML = filtered.map(pokemon => {
+      const typeClass = pokemon.types.length ? ' type-' + escapeHtml(pokemon.types[0]) : '';
+      return '<button class="dex-card' + typeClass + '" type="button" data-name="' + escapeHtml(pokemon.name) + '">' +
+        '<span class="dex-sprite-wrap"><img class="dex-sprite" src="' + escapeHtml(pokemon.sprite) + '" alt="" loading="lazy" decoding="async"></span>' +
+        '<span class="dex-info"><span class="dex-name">' + escapeHtml(pokemon.name) + '</span>' +
+        '<span class="dex-meta">' + pokemon.typeLabels.map(label => '<span class="dex-type">' + escapeHtml(label) + '</span>').join('') +
+        (pokemon.tier ? '<span class="dex-tier">' + escapeHtml(pokemon.tier) + '</span>' : '') + '<span class="dex-tier">Gen. ' + pokemon.generation + (pokemon.variant === 'shiny' ? ' \u00b7 Shiny' : '') + '</span></span></span></button>';
+    }).join('');
+    pokedexCount.textContent = filtered.length.toLocaleString('es') + ' Pokémon';
+    pokedexEmpty.hidden = filtered.length > 0;
+  }
+
+  Array.from(new Set(pokedex.map(pokemon => pokemon.tier).filter(Boolean)))
+    .sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+    .forEach(tier => {
+      const option = document.createElement('option');
+      option.value = tier;
+      option.textContent = tier;
+      pokedexTier.appendChild(option);
+    });
+  Array.from(new Map(pokedex.flatMap(pokemon => pokemon.types.map((type, index) => [type, pokemon.typeLabels[index]]))).entries())
+    .sort((a, b) => a[1].localeCompare(b[1], 'es'))
+    .forEach(([type, label]) => {
+      const option = document.createElement('option');
+      option.value = type;
+      option.textContent = label;
+      pokedexType.appendChild(option);
+    });
+  pokedexSearch.addEventListener('input', renderPokedex);
+  pokedexTier.addEventListener('change', renderPokedex);
+  pokedexType.addEventListener('change', renderPokedex);
+  pokedexClear.addEventListener('click', () => {
+    pokedexSearch.value = '';
+    pokedexTier.value = '';
+    pokedexType.value = '';
+    renderPokedex();
+  });
+  pokedexGrid.addEventListener('click', event => {
+    const card = event.target.closest('.dex-card');
+    if (!card) return;
+    const pokemon = pokedex.find(entry => entry.name === card.dataset.name);
+    if (!pokemon) return;
+    pokemonDialogName.textContent = pokemon.name;
+    pokemonDialogSprite.src = pokemon.sprite;
+    pokemonDialogSprite.alt = pokemon.name;
+    pokemonDialogInfo.textContent = [pokemon.typeLabels.join(' / '), pokemon.tier ? 'Tier ' + pokemon.tier : 'Tier especial/sin clasificar', '#' + String(pokemon.id).padStart(3, '0'), 'Generaci\u00f3n ' + pokemon.generation, pokemon.variant === 'shiny' ? 'Shiny' : 'Normal'].filter(Boolean).join(' · ');
+    const baseName = pokemon.name.replace(/^Shiny\s+/i, '').toLocaleLowerCase('es');
+    selectedHuntRecord = hunts.find(entry => Number(entry.id) === Number(pokemon.id)) ||
+      hunts.find(entry => entry.name.toLocaleLowerCase('es') === baseName) || null;
+    pokemonDialogLocations.innerHTML = selectedHuntRecord
+      ? '<h3>Mapas de localizaci\u00f3n</h3>' + zones.map(zone => {
+          const entry = selectedHuntRecord[zone];
+          return '<div class="pokemon-location-row"><strong>' + escapeHtml(zoneLabels[zone]) + '</strong>' + renderLocation(entry, selectedHuntRecord.name, zone) + '</div>';
+        }).join('')
+      : '<h3>Mapas de localizaci\u00f3n</h3><p class="location-empty">Todav\u00eda no hay mapas para este Pok\u00e9mon.</p>';
+    const hasMaps = selectedHuntRecord && zones.some(zone => hasZoneData(selectedHuntRecord, zone));
+    pokemonDialogHunt.disabled = !selectedHuntRecord;
+    pokemonDialogHunt.textContent = selectedHuntRecord ? 'Ver en Localizaciones' : 'Sin datos de localizaci\u00f3n';
+    pokemonDialogHunt.hidden = !selectedHuntRecord || !hasMaps;
+    pokemonDialog.showModal();
+  });
+  document.getElementById('pokemonDialogClose').addEventListener('click', () => pokemonDialog.close());
+  pokemonDialog.addEventListener('click', event => { if (event.target === pokemonDialog) pokemonDialog.close(); });
+  pokemonDialogHunt.addEventListener('click', () => {
+    const name = selectedHuntRecord ? selectedHuntRecord.name : pokemonDialogName.textContent.replace(/^Shiny\s+/i, '');
+    pokemonDialog.close();
+    showView('hunts', true);
+    huntSearch.value = name;
+    renderHunts();
+  });
+  pokedexGrid.addEventListener('error', event => {
+    if (event.target.matches('.dex-sprite')) event.target.classList.add('sprite-missing');
+  }, true);
   render();
 })();
+
 
 
 

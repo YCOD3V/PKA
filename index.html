@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -24,15 +24,39 @@
 
       <nav class="section-tabs" role="tablist" aria-label="Secciones del sitio">
         <button class="section-tab active" id="homeTab" type="button" role="tab" aria-controls="homePanel" aria-selected="true">Inicio</button>
+        <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones (Hunts)</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
       </nav>
 
       <section class="page-panel home-panel" id="homePanel" role="tabpanel" aria-labelledby="homeTab" tabindex="0">
         <img src="./img/LogoClan.png" alt="The Akatsuki" class="home-logo" width="340">
-        <p class="home-credit">Extensión realizada por Driel para el clan The Akatsuki.</p>
+        <p class="home-credit">Extensión realizada por Driel para el clan.</p>
       </section>
 
+
+      <section class="page-panel pokedex-panel" id="pokedexPanel" role="tabpanel" aria-labelledby="pokedexTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title">Pokédex <span class="title-mark">visual</span></h1>
+          <p class="subtitle">Explora los Pokémon disponibles y filtra por nombre, tipo o tier.</p>
+        </header>
+        <div class="dex-toolbar">
+          <label class="dex-search">Nombre
+            <input id="pokedexSearch" type="search" placeholder="Filtrar Pokémon por nombre…" autocomplete="off">
+          </label>
+          <label class="filter-label">Tier
+            <select id="pokedexTier" class="filter-select"><option value="">Todos los tiers</option></select>
+          </label>
+          <label class="filter-label">Tipo
+            <select id="pokedexType" class="filter-select"><option value="">Todos los tipos</option></select>
+          </label>
+          <button class="dex-clear" id="pokedexClear" type="button">Limpiar filtros</button>
+          <span class="dex-count" id="pokedexCount" aria-live="polite"></span>
+        </div>
+        <p class="dex-data-note">Cat&#xE1;logo de PokeAlliance: 910 registros de Pok&#xE9;mon normales y variocolor, con sus tiers y tipos del juego.</p>
+        <div class="pokedex-grid" id="pokedexGrid"></div>
+        <p class="empty-results" id="pokedexEmpty" hidden>No hay Pokémon que coincidan con esos filtros.</p>
+      </section>
       <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Localizaciones <span class="title-mark">(Hunts)</span></h1>
@@ -63,7 +87,7 @@
           </table>
           <p class="empty-results" id="huntEmpty" hidden>No se encontraron Pokémon con esos filtros.</p>
         </div>
-        <p class="data-credit">Extensión realizada por Driel para el clan The Akatsuki. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/edit?pli=1&amp;gid=696731486#gid=696731486" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>. Sprites y mapas cargados desde sus fuentes originales.</p>
+        <p class="data-credit">Extensión realizada por Driel para el clan. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/edit?pli=1&amp;gid=696731486#gid=696731486" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>. Sprites y mapas cargados desde sus fuentes originales.</p>
       </section>
 
       <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>
@@ -90,7 +114,20 @@
     <div class="map-dialog-image-wrap"><img id="mapDialogImage" alt="Mapa de localización ampliado"></div>
   </dialog>
 
+  <dialog class="pokemon-dialog" id="pokemonDialog" aria-labelledby="pokemonDialogName">
+    <button class="pokemon-dialog-close" id="pokemonDialogClose" type="button" aria-label="Cerrar ficha">&times;</button>
+    <img class="pokemon-dialog-sprite" id="pokemonDialogSprite" alt="">
+    <h2 id="pokemonDialogName"></h2>
+    <p id="pokemonDialogInfo"></p>
+    <section class="pokemon-dialog-locations" id="pokemonDialogLocations" aria-label="Mapas de localizaci&#xF3;n"></section>
+    <button class="section-tab active pokemon-dialog-hunt" id="pokemonDialogHunt" type="button">Ver en Localizaciones</button>
+  </dialog>
   <script src="./js/hunts-data.js" defer></script>
+  <script src="./js/pokedex-data.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>
+
+
+
+

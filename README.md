@@ -1,6 +1,6 @@
-# The Akatsuki — Pokédex, Hunts y calculadora
+﻿# The Akatsuki — Pokédex, Hunts y calculadora
 
-Sitio estático en español con cuatro secciones: **Inicio**, **Pokédex**, **Localizaciones (Hunts)** y **Calculadora de ventajas**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
+Sitio estático en español con cinco secciones: **Inicio**, **Pokédex**, **Localizaciones (Hunts)** y **Calculadora de ventajas** y **&#xBF;Qui&#xE9;nes somos?**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
 
 ## Estructura
 

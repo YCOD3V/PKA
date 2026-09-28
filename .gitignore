@@ -1,0 +1,16 @@
+﻿# Dependencias y salidas generadas
+node_modules/
+dist/
+build/
+.vercel/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Copia de trabajo original en texto, no necesaria para publicar
+/Akatsuki.txt
+

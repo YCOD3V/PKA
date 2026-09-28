@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
   const ICONS = {
     normal: '<circle cx="12" cy="12" r="7.2"/><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/>',
     fire: '<path d="M12 2c1.3 4-2.7 5.2-2.9 8.8-.1 1.7 1.3 3.1 3 3.1s3-1.3 3-3c0-1.6-1-2.4-1-2.4s1.8.9 1.8 3.6A4.8 4.8 0 0 1 11.9 17a5 5 0 0 1-5-5.2C7.1 7.3 10.3 5.7 12 2Z" fill="currentColor"/>',
@@ -359,7 +359,7 @@
   const rotationTypeNav = document.getElementById('rotationTypeNav');
   function rotationSprite(member){
     if (member.sprite) return member.sprite;
-    let species = member.name.split(/\s+[?-]\s+/)[0].replace(/\s*?+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
+    let species = member.name.split(/\s+(?:\u2014|-)\s+/)[0].replace(/\s+(?:\u2014|-)\s+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
     const shiny = /^Shiny\s+/i.test(species);
     species = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(Psy|Bug)$/i, '').trim();
     const found = pokedex.find(p => p.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + species).toLocaleLowerCase('en')) ||
@@ -378,7 +378,7 @@
     rotationGrid.innerHTML = rotationsData.rotations.map(rotation => {
       const groups = rotation.groups.map(group => '<section class="rotation-group"><h3>' + escapeHtml(group.label) + '</h3><div class="rotation-roster">' + group.members.map(member => {
         const sprite = rotationSprite(member);
-        const species = member.name.split(/\s+[?-]\s+/)[0].replace(/\s*?+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
+        const species = member.name.split(/\s+(?:\u2014|-)\s+/)[0].replace(/\s+(?:\u2014|-)\s+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
         const shiny = /^Shiny\s+/i.test(species);
         const dexName = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(Psy|Bug)$/i, '').trim();
         const dexMatch = pokedex.find(p => p.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + dexName).toLocaleLowerCase('en')) || pokedex.find(p => p.name.toLocaleLowerCase('en') === dexName.toLocaleLowerCase('en'));
@@ -489,6 +489,7 @@
   renderRotations();
   render();
 })();
+
 
 
 

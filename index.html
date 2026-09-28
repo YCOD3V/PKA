@@ -28,6 +28,7 @@
         <button class="section-tab" id="aboutTab" type="button" role="tab" aria-controls="aboutPanel" aria-selected="false" tabindex="-1">&#xBF;Qui&#xE9;nes somos?</button>
         <button class="section-tab" id="rotationsTab" type="button" role="tab" aria-controls="rotationsPanel" aria-selected="false" tabindex="-1">Rotaciones</button>
         <button class="section-tab" id="guild-bossesTab" type="button" role="tab" aria-controls="guild-bossesPanel" aria-selected="false" tabindex="-1">Guild Bosses</button>
+        <button class="section-tab" id="rocketsTab" type="button" role="tab" aria-controls="rocketsPanel" aria-selected="false" tabindex="-1">Rockets</button>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
@@ -42,6 +43,14 @@
           <img src="https://img.pokemondb.net/sprites/black-white/anim/normal/squirtle.gif" alt="Squirtle" width="48" height="48">
         </div>
         </div>
+      </section>
+
+      <section class="page-panel rockets-panel" id="rocketsPanel" role="tabpanel" aria-labelledby="rocketsTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title">Rockets <span class="title-mark">semanales</span></h1>
+          <p class="subtitle">Pokémon recomendados y ventajas elementales contra cada Pokémon del NPC.</p>
+        </header>
+        <div id="rocketCards" class="rocket-grid"></div>
       </section>
 
 
@@ -203,6 +212,14 @@
     <div class="rotation-dialog-content" id="rotationDialogContent"></div>
   </dialog>
 
+  <dialog class="map-dialog rocket-dialog" id="rocketDialog" aria-labelledby="rocketDialogTitle">
+    <div class="map-dialog-header">
+      <h2 id="rocketDialogTitle">Rocket semanal</h2>
+      <button class="map-dialog-close" id="rocketDialogClose" type="button" aria-label="Cerrar Rocket">&times;</button>
+    </div>
+    <div class="rocket-dialog-body" id="rocketDialogBody"></div>
+  </dialog>
+
   <dialog class="pokemon-dialog" id="pokemonDialog" aria-labelledby="pokemonDialogName">
     <button class="pokemon-dialog-close" id="pokemonDialogClose" type="button" aria-label="Cerrar ficha">&times;</button>
     <img class="pokemon-dialog-sprite" id="pokemonDialogSprite" alt="">
@@ -214,6 +231,7 @@
   <script src="./js/hunts-data.js" defer></script>
   <script src="./js/pokedex-data.js" defer></script>
   <script src="./js/rotaciones-data.js" defer></script>
+  <script src="./js/rockets-data.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>

@@ -77,7 +77,8 @@
   const bossTypeColors = {
     fire:'#f08030',water:'#6890f0',fighting:'#c03028',ground:'#e0c068',bug:'#a8b820',
     rock:'#b8a038',ghost:'#705898',dark:'#705848',steel:'#b8b8d0',electric:'#f8d030',
-    psychic:'#f85888',grass:'#78c850',ice:'#98d8d8'
+    psychic:'#f85888',grass:'#78c850',ice:'#98d8d8',fairy:'#ee99ac',dragon:'#7038f8',
+    flying:'#a890f0',poison:'#a040a0',normal:'#a8a878'
   };
   document.querySelectorAll('.guild-boss-card').forEach(card => {
     const name = card.querySelector('h2')?.textContent.trim();
@@ -224,6 +225,7 @@
   const aboutTab = document.getElementById('aboutTab');
   const rotationsTab = document.getElementById('rotationsTab');
   const guildBossesTab = document.getElementById('guild-bossesTab');
+  const rocketsTab = document.getElementById('rocketsTab');
   const homePanel = document.getElementById('homePanel');
   const pokedexPanel = document.getElementById('pokedexPanel');
   const huntsPanel = document.getElementById('huntsPanel');
@@ -231,8 +233,9 @@
   const aboutPanel = document.getElementById('aboutPanel');
   const rotationsPanel = document.getElementById('rotationsPanel');
   const guildBossesPanel = document.getElementById('guild-bossesPanel');
-  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, pokedexTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
+  const rocketsPanel = document.getElementById('rocketsPanel');
+  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, rocketsTab, pokedexTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, rockets: rocketsPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
@@ -279,7 +282,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -292,11 +295,32 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' || initialHash === 'rockets' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }
 
+  const rocketCards = document.getElementById('rocketCards');
+  const rocketDialog = document.getElementById('rocketDialog');
+  const rocketDialogTitle = document.getElementById('rocketDialogTitle');
+  const rocketDialogBody = document.getElementById('rocketDialogBody');
+  const rockets = Array.isArray(window.ROCKETS_DATA) ? window.ROCKETS_DATA : [];
+  function renderRocketBody(rocket){
+    if (!rocket.team.length) return '<ul class="rocket-final-facts">' + rocket.facts.map(fact => '<li>' + escapeHtml(fact) + '</li>').join('') + '</ul>';
+    return '<div class="rocket-matchups">' + rocket.team.map(([npc, recommended, counters]) => '<div class="rocket-matchup"><div class="rocket-pokemon"><span class="rocket-label">Pok\u00e9mon del NPC</span><div class="rocket-pokemon-main"><img src="' + escapeHtml(npc.sprite) + '" alt="" loading="lazy"><strong>' + escapeHtml(npc.name) + '</strong></div></div><span class="rocket-arrow" aria-hidden="true">\u2192</span><div class="rocket-pokemon rocket-recommended"><span class="rocket-label">Recomendado</span><div class="rocket-pokemon-main"><img src="' + escapeHtml(recommended.sprite) + '" alt="" loading="lazy"><strong>' + escapeHtml(recommended.name) + '</strong></div><div class="rocket-counters"><span>Debilidades del NPC</span><div class="boss-weakness-types">' + counters.map(key => '<span class="boss-type-chip" style="--type-color:' + bossTypeColors[key] + '">' + icon(key) + '<span>' + escapeHtml(TYPE_MAP[key].label) + '</span></span>').join('') + '</div></div></div></div>').join('') + '</div>';
+  }
+  rocketCards.innerHTML = rockets.map((rocket,index) => '<button class="rocket-card' + (rocket.team.length ? '' : ' rocket-final-card') + '" type="button" data-rocket-index="' + index + '" aria-haspopup="dialog"><span class="rocket-number">' + escapeHtml(rocket.number) + '</span><span class="rocket-card-info"><span class="rocket-card-kicker">' + escapeHtml(rocket.kicker || 'ROCKET SEMANAL') + '</span><strong class="rocket-card-name">' + escapeHtml(rocket.name) + '</strong><span class="rocket-card-hint">' + (rocket.team.length ? rocket.team.length + ' enfrentamientos' : 'Ver datos del jefe final') + ' <span aria-hidden="true">\u2197</span></span></span></button>').join('');
+  rocketCards.addEventListener('click', event => {
+    const card = event.target.closest('.rocket-card');
+    if (!card) return;
+    const rocket = rockets[Number(card.dataset.rocketIndex)];
+    if (!rocket) return;
+    rocketDialogTitle.textContent = rocket.number + ' \u00b7 ' + rocket.name;
+    rocketDialogBody.innerHTML = renderRocketBody(rocket);
+    rocketDialog.showModal();
+  });
+  document.getElementById('rocketDialogClose').addEventListener('click', () => rocketDialog.close());
+  rocketDialog.addEventListener('click', event => { if (event.target === rocketDialog) rocketDialog.close(); });
   function hasZoneData(record, zone){
     const entry = record[zone];
     return entry && ((entry.maps && entry.maps.length > 0) || entry.note);

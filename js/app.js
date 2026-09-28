@@ -68,6 +68,28 @@
     return '<svg class="icon' + (extraClass ? ' ' + extraClass : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[key] + '</svg>';
   }
 
+  const bossWeaknesses = {
+    Steelix: ['fire','water','fighting','ground'],
+    Jynx: ['fire','bug','rock','ghost','dark','steel'],
+    Tentacruel: ['electric','ground','psychic'],
+    Marowak: ['water','grass','ice']
+  };
+  const bossTypeColors = {
+    fire:'#f08030',water:'#6890f0',fighting:'#c03028',ground:'#e0c068',bug:'#a8b820',
+    rock:'#b8a038',ghost:'#705898',dark:'#705848',steel:'#b8b8d0',electric:'#f8d030',
+    psychic:'#f85888',grass:'#78c850',ice:'#98d8d8'
+  };
+  document.querySelectorAll('.guild-boss-card').forEach(card => {
+    const name = card.querySelector('h2')?.textContent.trim();
+    const weaknesses = bossWeaknesses[name];
+    const weaknessRow = card.querySelector('p');
+    if (!weaknesses || !weaknessRow) return;
+    weaknessRow.innerHTML = '<strong>Debilidades:</strong><span class="boss-weakness-types">' + weaknesses.map(key => {
+      const type = TYPE_MAP[key];
+      return '<span class="boss-type-chip" style="--type-color:' + bossTypeColors[key] + '">' + icon(key) + '<span>' + type.label + '</span></span>';
+    }).join('') + '</span>';
+  });
+
   const grid = document.getElementById('grid');
   const resultHead = document.getElementById('resultHead');
   const resultBody = document.getElementById('resultBody');

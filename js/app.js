@@ -201,14 +201,16 @@
   const calculatorTab = document.getElementById('calculatorTab');
   const aboutTab = document.getElementById('aboutTab');
   const rotationsTab = document.getElementById('rotationsTab');
+  const guildBossesTab = document.getElementById('guild-bossesTab');
   const homePanel = document.getElementById('homePanel');
   const pokedexPanel = document.getElementById('pokedexPanel');
   const huntsPanel = document.getElementById('huntsPanel');
   const calculatorPanel = document.getElementById('calculatorPanel');
   const aboutPanel = document.getElementById('aboutPanel');
   const rotationsPanel = document.getElementById('rotationsPanel');
-  const tabs = [homeTab, aboutTab, rotationsTab, pokedexTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
+  const guildBossesPanel = document.getElementById('guild-bossesPanel');
+  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, pokedexTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
@@ -255,7 +257,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -268,7 +270,7 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }

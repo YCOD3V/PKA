@@ -26,6 +26,7 @@
         <button class="section-tab active" id="homeTab" type="button" role="tab" aria-controls="homePanel" aria-selected="true">Inicio</button>
         <button class="section-tab" id="aboutTab" type="button" role="tab" aria-controls="aboutPanel" aria-selected="false" tabindex="-1">&#xBF;Qui&#xE9;nes somos?</button>
         <button class="section-tab" id="rotationsTab" type="button" role="tab" aria-controls="rotationsPanel" aria-selected="false" tabindex="-1">Rotaciones</button>
+        <button class="section-tab" id="guild-bossesTab" type="button" role="tab" aria-controls="guild-bossesPanel" aria-selected="false" tabindex="-1">Guild Bosses</button>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
@@ -128,6 +129,35 @@
         <nav class="rotation-type-nav" id="rotationTypeNav" aria-label="Ir a una rotaci&#xF3;n por elemento"></nav>
         <div class="rotation-grid" id="rotationGrid"></div>
         <p class="rotation-source">(Créditos: <a href="https://docs.google.com/document/d/1mVsLDJnSddFdjA3r_Gm66L9E5VVb1nAm/edit" target="_blank" rel="noopener noreferrer">Shaolin Pig Slayer - MOON</a>)</p>
+      </section>
+
+      <section class="page-panel guild-bosses-panel" id="guild-bossesPanel" role="tabpanel" aria-labelledby="guild-bossesTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title">Guild Bosses</h1>
+          <p class="subtitle">Debilidades y equipos recomendados para cada jefe.</p>
+        </header>
+        <div class="guild-boss-grid">
+          <article class="guild-boss-card">
+            <header><img src="https://img.pokemondb.net/sprites/black-white/anim/normal/steelix-f.gif" alt="Steelix" width="72" height="72"><h2>Steelix</h2></header>
+            <p><strong>Debilidades:</strong> Fuego, Agua, Lucha y Tierra.</p>
+            <p><strong>Equipo recomendado:</strong> Infernape, Arcanine, Poliwrath y Rhyperior.</p>
+          </article>
+          <article class="guild-boss-card">
+            <header><img src="https://img.pokemondb.net/sprites/black-white/anim/normal/jynx.gif" alt="Jynx" width="72" height="72"><h2>Jynx</h2></header>
+            <p><strong>Debilidades:</strong> Fuego, Bicho, Roca, Fantasma, Siniestro y Acero.</p>
+            <p><strong>Equipo recomendado:</strong> Shiny Houndoom, Pinsir, Dusknoir y Skarmory.</p>
+          </article>
+          <article class="guild-boss-card">
+            <header><img src="https://img.pokemondb.net/sprites/black-white/anim/normal/tentacruel.gif" alt="Tentacruel" width="72" height="72"><h2>Tentacruel</h2></header>
+            <p><strong>Debilidades:</strong> Eléctrico, Tierra y Psíquico.</p>
+            <p><strong>Equipo recomendado:</strong> Luxray, Rhyperior, Espeon y Alakazam.</p>
+          </article>
+          <article class="guild-boss-card">
+            <header><img src="https://img.pokemondb.net/sprites/black-white/anim/normal/marowak.gif" alt="Marowak" width="72" height="72"><h2>Marowak</h2></header>
+            <p><strong>Debilidades:</strong> Agua, Planta y Hielo.</p>
+            <p><strong>Equipo recomendado:</strong> Blastoise, Tangrowth, Lapras y Glaceon.</p>
+          </article>
+        </div>
       </section>
 
       <section class="page-panel calculator-panel" id="calculatorPanel" role="tabpanel" aria-labelledby="calculatorTab" tabindex="0" hidden>

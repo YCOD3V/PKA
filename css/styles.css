@@ -452,7 +452,8 @@
 /* Inicio del clan */
 .stage[data-view="home"]{ max-width:1200px; }
 
-.home-panel{min-height:clamp(500px,68vh,660px);display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:center;gap:0;padding:0 0 10px;text-align:center}
+.home-panel{position:relative;isolation:isolate;min-height:clamp(500px,68vh,660px);display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:center;gap:0;padding:0 0 10px;text-align:center}
+.home-panel::before{content:"";position:absolute;inset:0;z-index:-1;background:url("https://cdn.pixabay.com/photo/2016/12/08/16/56/pokeball-1892230_1280.png") center 48%/min(70vw,720px) auto no-repeat;opacity:.055;pointer-events:none}
 .about-panel,.rotations-panel,.guild-bosses-panel,.pokedex-panel,.calculator-panel{min-height:clamp(500px,68vh,660px)}
 .home-alliance-logo{display:block;width:min(190px,38vw);height:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(42,126,220,.18))}
 .home-signature{display:grid;justify-items:center;gap:2px}

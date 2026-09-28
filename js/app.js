@@ -357,6 +357,7 @@
 
   const rotationGrid = document.getElementById('rotationGrid');
   const rotationTypeNav = document.getElementById('rotationTypeNav');
+  const rotationTips = document.getElementById('rotationTips');
   function rotationSprite(member){
     if (member.sprite) return member.sprite;
     let species = member.name.split(/\s+(?:\u2014|-)\s+/)[0].replace(/\s+(?:\u2014|-)\s+.*$/, '').replace(/\s*\([^)]*\)/g, '').trim();
@@ -368,13 +369,17 @@
   }
   function renderRotations(){
     if (!rotationsData || !rotationGrid) return;
-    document.getElementById('rotationsTitle').textContent = rotationsData.title;
-    document.getElementById('rotationsDescription').textContent = rotationsData.description;
-    document.getElementById('rotationCaveat').innerHTML = '<strong>Importante:</strong> ' + escapeHtml(rotationsData.caveat);
+    document.getElementById('rotationsTitle').textContent = 'Sinergias elementales';
+    document.getElementById('rotationsDescription').textContent = 'Guía sugerida de equipos orientados a cada elemento.';
     const req = rotationsData.minRequirements;
     document.getElementById('rotationRequirements').innerHTML = '<h2>' + escapeHtml(req.title) + '</h2><p>' + escapeHtml(req.intro) + '</p><ul>' + req.items.map(item => '<li>' + escapeHtml(item) + '</li>').join('') + '</ul><p class="rotation-note">' + escapeHtml(req.note) + '</p>';
-    document.getElementById('rotationTips').innerHTML = rotationsData.tips.map(tip => '<article><h3>' + escapeHtml(tip.name) + '</h3><p>' + escapeHtml(tip.text) + '</p></article>').join('');
-    rotationTypeNav.innerHTML = rotationsData.rotations.map(rotation => '<button class="rotation-jump" type="button" data-target="rotation-' + escapeHtml(rotation.id) + '">' + escapeHtml(rotation.name) + '</button>').join('');
+    rotationTips.innerHTML = rotationsData.tips.map(tip => {
+      const sprite = rotationSprite({name:tip.name, sprite:''});
+      return '<article class="rotation-tip" data-pokemon="' + escapeHtml(tip.name) + '">' +
+        (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" alt="" loading="lazy" decoding="async">' : '') +
+        '<div><h3>' + escapeHtml(tip.name) + '</h3><p>' + escapeHtml(tip.text) + '</p></div></article>';
+    }).join('');
+    rotationTypeNav.innerHTML = rotationsData.rotations.map(rotation => '<button class="rotation-jump" type="button" aria-expanded="false" aria-controls="rotation-' + escapeHtml(rotation.id) + '" data-target="rotation-' + escapeHtml(rotation.id) + '">' + escapeHtml(rotation.name) + '</button>').join('');
     rotationGrid.innerHTML = rotationsData.rotations.map(rotation => {
       const groups = rotation.groups.map(group => '<section class="rotation-group"><h3>' + escapeHtml(group.label) + '</h3><div class="rotation-roster">' + group.members.map(member => {
         const sprite = rotationSprite(member);
@@ -382,19 +387,64 @@
         const shiny = /^Shiny\s+/i.test(species);
         const dexName = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(Psy|Bug)$/i, '').trim();
         const dexMatch = pokedex.find(p => p.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + dexName).toLocaleLowerCase('en')) || pokedex.find(p => p.name.toLocaleLowerCase('en') === dexName.toLocaleLowerCase('en'));
-        return '<div class="rotation-pokemon">' + (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" data-pokemon-id="' + (dexMatch ? dexMatch.id : 0) + '" data-variant="' + (shiny ? 'shiny' : 'normal') + '" alt="" loading="lazy" decoding="async">' : '') + '<span>' + escapeHtml(member.name) + '</span></div>';
+        return '<button type="button" class="rotation-pokemon" data-pokemon="' + escapeHtml(member.name) + '">' + (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" data-pokemon-id="' + (dexMatch ? dexMatch.id : 0) + '" data-variant="' + (shiny ? 'shiny' : 'normal') + '" alt="" loading="lazy" decoding="async">' : '') + '<span>' + escapeHtml(member.name) + '</span></button>';
       }).join('') + '</div></section>').join('');
-      const upgrades = rotation.improvements.length ? '<section class="rotation-group rotation-upgrades"><h3>Mejoras</h3><div class="rotation-tags">' + rotation.improvements.map(item => '<span>' + escapeHtml(item) + '</span>').join('') + '</div></section>' : '';
+      const upgrades = rotation.improvements.length ? '<section class="rotation-group rotation-upgrades"><h3>Mejoras</h3><div class="rotation-tags">' + rotation.improvements.map(item => {
+        const sprite = rotationSprite({name:item, sprite:''});
+        return '<button type="button" class="rotation-pokemon rotation-improvement" data-pokemon="' + escapeHtml(item) + '">' + (sprite ? '<img class="rotation-sprite" src="' + escapeHtml(sprite) + '" alt="" loading="lazy" decoding="async">' : '') + '<span>' + escapeHtml(item) + '</span></button>';
+      }).join('') + '</div></section>' : '';
       const proscons = rotation.strength || rotation.weakness ? '<div class="rotation-proscons">' + (rotation.strength ? '<div><h3>Ventajas</h3><p>' + escapeHtml(rotation.strength) + '</p></div>' : '') + (rotation.weakness ? '<div><h3>Desventajas</h3><p>' + escapeHtml(rotation.weakness) + '</p></div>' : '') + '</div>' : '';
-      return '<article class="rotation-card" id="rotation-' + escapeHtml(rotation.id) + '"><header><h2>' + escapeHtml(rotation.name) + '</h2>' + (rotation.status ? '<span class="rotation-status">Gu?a incompleta</span>' : '') + '</header>' + (rotation.intro ? '<p class="rotation-intro">' + escapeHtml(rotation.intro) + '</p>' : '') + groups + upgrades + proscons + '</article>';
+      return '<article class="rotation-card" id="rotation-' + escapeHtml(rotation.id) + '" hidden><header><h2>' + escapeHtml(rotation.name) + '</h2>' + (rotation.status ? '<span class="rotation-status">Gu\u00eda incompleta</span>' : '') + '</header>' + (rotation.intro ? '<p class="rotation-intro">' + escapeHtml(rotation.intro) + '</p>' : '') + groups + upgrades + proscons + '</article>';
     }).join('');
   }
   rotationTypeNav.addEventListener('click', event => {
     const button = event.target.closest('.rotation-jump');
     if (!button) return;
-    document.getElementById(button.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const target = document.getElementById(button.dataset.target);
+    const wasOpen = button.getAttribute('aria-expanded') === 'true';
+    rotationGrid.querySelectorAll('.rotation-card').forEach(card => { card.hidden = true; });
+    rotationTypeNav.querySelectorAll('.rotation-jump').forEach(item => item.setAttribute('aria-expanded', 'false'));
+    if (!wasOpen && target) {
+      target.hidden = false;
+      button.setAttribute('aria-expanded', 'true');
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   });
+  function openRotationPokemon(name){
+    const species = name.split(/\s+(?:\u2014|-)\s+/)[0].replace(/\s*\([^)]*\)/g, '').trim();
+    const shiny = /^Shiny\s+/i.test(species);
+    const baseName = species.replace(/^Shiny\s+/i, '').replace(/^Mega\s+/i, '').replace(/\s+(?:Ice|Electric|Fire|Bug|Psy)$/i, '').trim();
+    const pokemon = pokedex.find(entry => entry.name.toLocaleLowerCase('en') === species.toLocaleLowerCase('en')) ||
+      pokedex.find(entry => entry.name.toLocaleLowerCase('en') === ((shiny ? 'shiny ' : '') + baseName).toLocaleLowerCase('en')) ||
+      pokedex.find(entry => entry.name.toLocaleLowerCase('en') === baseName.toLocaleLowerCase('en'));
+    const sprite = pokemon ? pokemon.sprite : rotationSprite({name:species, sprite:''});
+    pokemonDialogName.textContent = species;
+    pokemonDialogSprite.dataset.pokemonId = pokemon ? pokemon.id : '0';
+    pokemonDialogSprite.dataset.variant = shiny ? 'shiny' : 'normal';
+    pokemonDialogSprite.dataset.fallbackAttempted = 'false';
+    pokemonDialogSprite.classList.remove('sprite-missing');
+    pokemonDialogSprite.src = sprite || '';
+    pokemonDialogSprite.alt = species;
+    pokemonDialogInfo.textContent = pokemon ? [pokemon.typeLabels.join(' / '), pokemon.tier ? 'Tier ' + pokemon.tier : 'Tier especial/sin clasificar', '#' + String(pokemon.id).padStart(3, '0')].filter(Boolean).join(' · ') : 'Pokémon recomendado en las rotaciones';
+    selectedHuntRecord = (pokemon && hunts.find(entry => Number(entry.id) === Number(pokemon.id))) ||
+      hunts.find(entry => entry.name.toLocaleLowerCase('es') === baseName.toLocaleLowerCase('es')) || null;
+    pokemonDialogLocations.innerHTML = '<h3>Mapas de localización</h3>' + (selectedHuntRecord
+      ? zones.map(zone => '<div class="pokemon-location-row"><strong>' + escapeHtml(zoneLabels[zone]) + '</strong>' + renderLocation(selectedHuntRecord[zone], selectedHuntRecord.name, zone) + '</div>').join('')
+      : '<p class="location-empty">Todavía no hay mapas para este Pokémon.</p>');
+    const hasMaps = selectedHuntRecord && zones.some(zone => hasZoneData(selectedHuntRecord, zone));
+    pokemonDialogHunt.hidden = !hasMaps;
+    pokemonDialogHunt.disabled = !selectedHuntRecord;
+    pokemonDialogHunt.textContent = hasMaps ? 'Ver en Localizaciones' : 'Sin datos de localización';
+    pokemonDialog.showModal();
+  }
+  [rotationGrid, rotationTips].forEach(container => container.addEventListener('click', event => {
+    const item = event.target.closest('[data-pokemon]');
+    if (item) openRotationPokemon(item.dataset.pokemon);
+  }));
   rotationGrid.addEventListener('error', event => {
+    if (event.target.matches('.rotation-sprite')) fallbackPokemonSprite(event.target);
+  }, true);
+  rotationTips.addEventListener('error', event => {
     if (event.target.matches('.rotation-sprite')) fallbackPokemonSprite(event.target);
   }, true);
 

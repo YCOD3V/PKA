@@ -595,3 +595,17 @@
   .rotation-type-nav{position:static}
   .rotation-proscons{grid-template-columns:1fr}
 }
+.rotations-panel>.page-header{margin-bottom:16px}
+.rotation-callout{display:none}
+.rotation-jump[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-dim);color:var(--text);box-shadow:0 0 16px rgba(229,9,20,.16)}
+.rotation-card[hidden]{display:none}
+.rotation-pokemon{font:inherit;text-align:left;cursor:pointer;transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.rotation-pokemon:hover{border-color:var(--accent);background:rgba(201,0,0,.13);transform:translateY(-1px)}
+.rotation-improvement{color:var(--text-dim)}
+.rotation-tags .rotation-improvement{border-radius:9px}
+.rotation-tip{display:flex;align-items:flex-start;gap:12px}
+.rotation-tip .rotation-sprite{width:42px;height:42px;padding:4px;border:1px solid var(--border);border-radius:10px;background:var(--screen)}
+.rotation-tip>div{min-width:0}
+.rotation-tip h3{margin-bottom:5px}
+.rotation-tip p{line-height:1.6}
+.rotation-card .rotation-roster .rotation-pokemon{min-height:43px}

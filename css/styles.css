@@ -453,11 +453,11 @@
 .stage[data-view="home"]{ max-width:1200px; }
 
 .home-panel{min-height:clamp(500px,68vh,660px);display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:center;gap:0;padding:0 0 10px;text-align:center}
+.about-panel,.rotations-panel,.guild-bosses-panel,.pokedex-panel,.calculator-panel{min-height:clamp(500px,68vh,660px)}
 .home-alliance-logo{display:block;width:min(190px,38vw);height:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(42,126,220,.18))}
 .home-signature{display:grid;justify-items:center;gap:2px}
 .home-starters{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 2px}
 .home-starters img{display:block;width:42px;height:42px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 5px rgba(0,0,0,.45))}
-.home-credit{ margin:0; color:var(--text-dim); font-size:13px; letter-spacing:.02em; }
 
 /* Vista ampliada del mapa dentro del sitio */
 .map-dialog{ width:min(1000px,94vw); max-width:94vw; max-height:92vh; margin:auto; padding:0; overflow:hidden; border:1px solid #4a3030; border-radius:16px; background:#111; color:var(--text); box-shadow:0 24px 90px rgba(0,0,0,.75),0 0 28px rgba(229,9,20,.12); }
@@ -473,6 +473,7 @@
   .section-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
   .section-tab{padding:9px 7px;font-size:11px}
   .home-panel{min-height:clamp(440px,68svh,660px)}
+  .about-panel,.rotations-panel,.guild-bosses-panel,.pokedex-panel,.calculator-panel{min-height:clamp(440px,68svh,660px)}
   .map-dialog{ width:96vw; max-width:96vw; border-radius:12px; }
   .map-dialog-image-wrap{ padding:8px; }
   .map-dialog-image-wrap img{ max-height:calc(88vh - 72px); }

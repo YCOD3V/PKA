@@ -30,6 +30,7 @@
         <button class="section-tab" id="guild-bossesTab" type="button" role="tab" aria-controls="guild-bossesPanel" aria-selected="false" tabindex="-1">Guild Bosses</button>
         <button class="section-tab" id="rocketsTab" type="button" role="tab" aria-controls="rocketsPanel" aria-selected="false" tabindex="-1">Rockets</button>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
+        <button class="section-tab" id="hazardTab" type="button" role="tab" aria-controls="hazardPanel" aria-selected="false" tabindex="-1">Hazard</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calculadora de ventajas</button>
       </nav>
@@ -76,7 +77,16 @@
         <div class="pokedex-grid" id="pokedexGrid"></div>
         <p class="empty-results" id="pokedexEmpty" hidden>No hay Pokémon que coincidan con esos filtros.</p>
       </section>
-      <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0" hidden>
+      <section class="page-panel hazard-panel" id="hazardPanel" role="tabpanel" aria-labelledby="hazardTab" tabindex="0" hidden>
+        <header class="header page-header">
+          <h1 class="title">Hazard</h1>
+          <p class="subtitle">Daño necesario para Hazard con y sin runa de ataque + precisión.</p>
+        </header>
+        <figure class="hazard-guide">
+          <img src="./assets/hazard.jpg" alt="Tabla de daño necesario para Hazard según amenaza, runa de ataque y precisión" loading="lazy" decoding="async">
+          <figcaption>Créditos: Xadin y Loxas.</figcaption>
+        </figure>
+      </section>      <section class="page-panel hunts-panel" id="huntsPanel" role="tabpanel" aria-labelledby="huntsTab" tabindex="0" hidden>
         <header class="header page-header">
           <h1 class="title">Localizaciones</h1>
           <p class="subtitle">Busca un Pokémon, revisa su categoría y abre el mapa de cada zona de caza.</p>

@@ -1,6 +1,6 @@
 # The Akatsuki — Pokédex, Hunts y calculadora
 
-Sitio estático en español con seis secciones: **Inicio**, **¿Quiénes somos?**, **Rotaciones**, **Pokédex**, **Localizaciones** y **Calculadora de ventajas**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
+Sitio estático en español con nueve secciones: **Inicio**, **¿Quiénes somos?**, **Rotaciones**, **Pokédex**, **Hazard**, **Localizaciones** y **Calculadora de ventajas**. Los mapas se abren dentro de la página. La interfaz usa una paleta inspirada en Akatsuki y sprites Pokémon en pixel art.
 
 ## Estructura
 
@@ -30,4 +30,4 @@ Abre `index.html` en el navegador. No requiere dependencias ni compilación.
 
 Importa el repositorio desde GitHub. Selecciona **Other** como framework, deja vacíos el comando de compilación y el directorio de salida, y despliega. No hace falta `vercel.json`.
 
-CSS, JavaScript e imágenes locales usan rutas relativas. Las vistas se controlan con fragmentos (`#home`, `#about`, `#rotations`, `#pokedex`, `#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.
+CSS, JavaScript e imágenes locales usan rutas relativas. Las vistas se controlan con fragmentos (`#home`, `#about`, `#rotations`, `#pokedex`, `#hazard`, `#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.

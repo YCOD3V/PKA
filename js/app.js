@@ -220,6 +220,7 @@
   const app = document.getElementById('app');
   const homeTab = document.getElementById('homeTab');
   const pokedexTab = document.getElementById('pokedexTab');
+  const hazardTab = document.getElementById('hazardTab');
   const huntsTab = document.getElementById('huntsTab');
   const calculatorTab = document.getElementById('calculatorTab');
   const aboutTab = document.getElementById('aboutTab');
@@ -228,14 +229,15 @@
   const rocketsTab = document.getElementById('rocketsTab');
   const homePanel = document.getElementById('homePanel');
   const pokedexPanel = document.getElementById('pokedexPanel');
+  const hazardPanel = document.getElementById('hazardPanel');
   const huntsPanel = document.getElementById('huntsPanel');
   const calculatorPanel = document.getElementById('calculatorPanel');
   const aboutPanel = document.getElementById('aboutPanel');
   const rotationsPanel = document.getElementById('rotationsPanel');
   const guildBossesPanel = document.getElementById('guild-bossesPanel');
   const rocketsPanel = document.getElementById('rocketsPanel');
-  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, rocketsTab, pokedexTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, rockets: rocketsPanel, pokedex: pokedexPanel, hunts: huntsPanel, calculator: calculatorPanel };
+  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, rocketsTab, pokedexTab, hazardTab, huntsTab, calculatorTab];
+  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, rockets: rocketsPanel, pokedex: pokedexPanel, hazard: hazardPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
@@ -282,7 +284,7 @@
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'hazard' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -295,7 +297,7 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' || initialHash === 'rockets' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'hazard' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' || initialHash === 'rockets' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }

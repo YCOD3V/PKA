@@ -16,18 +16,5 @@ Sitio estático en español con nueve secciones: **Inicio**, **¿Quiénes somos?
 
 El catálogo local contiene **910 registros** de la [API pública de Alliance PokeTibia Wiki](https://wiki.pokealliance.com/api/pokemon), incluidos Pokémon normales y Shiny. La consulta usada registró 88 entradas de Categoría 1. Los sprites de rotaciones se enlazan desde la guía comunitaria de referencia; el sitio no consulta APIs para construir sus vistas.
 
-## Ejecutar
 
-Abre `index.html` en el navegador. No requiere dependencias ni compilación.
-
-## GitHub Pages
-
-1. Crea un repositorio y sube los archivos del proyecto.
-2. En **Settings → Pages**, configura el despliegue desde la rama principal y la carpeta raíz.
-3. Guarda los cambios y espera a que GitHub publique el sitio.
-
-## Vercel
-
-Importa el repositorio desde GitHub. Selecciona **Other** como framework, deja vacíos el comando de compilación y el directorio de salida, y despliega. No hace falta `vercel.json`.
-
-CSS, JavaScript e imágenes locales usan rutas relativas. Las vistas se controlan con fragmentos (`#home`, `#about`, `#rotations`, `#pokedex`, `#hazard`, `#hunts` y `#calculator`), compatibles con GitHub Pages y Vercel sin reglas de reescritura.
+La guía de Hazard también está disponible en la pestaña **Hazard** (fragmento #hazard).

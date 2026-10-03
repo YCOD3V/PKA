@@ -44,8 +44,18 @@
       <section class="page-panel gyms-panel" id="gymsPanel" hidden>
         <header class="header page-header"><h1 class="title">GYMs de Kanto</h1><p class="subtitle">Las tareas de Alfred, líderes y equipos de cada gimnasio.</p></header>
         <div class="gym-grid" id="gymGrid"></div>
+        <section class="gym-materials" aria-labelledby="gymMaterialsTitle">
+          <h2 id="gymMaterialsTitle">Materiales de cada Talent</h2>
+          <div class="gym-materials-list" id="gymMaterialsList"></div>
+        </section>
         <p class="data-credit">Extensión realizada por Driel para el clan The Akatsuki. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/htmlview?pli=1&amp;gid=696731486&amp;pru=AAABoSc_tPI*49wkYtaCAHLL0LEigOgGPA#gid=1798431963" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>.</p>
       </section>
+
+      <dialog class="gym-map-dialog" id="gymMapDialog" aria-labelledby="gymMapDialogTitle">
+        <button class="gym-map-close" id="gymMapClose" type="button" aria-label="Cerrar mapa">&times;</button>
+        <h2 id="gymMapDialogTitle"></h2>
+        <img id="gymMapDialogImage" alt="">
+      </dialog>
 
       <section class="page-panel home-panel" id="homePanel" role="tabpanel" aria-labelledby="homeTab" tabindex="0">
         <img src="./assets/pokealliance-logo.png" alt="PokeAlliance" class="home-alliance-logo" width="170" height="170">
@@ -149,7 +159,7 @@
             <div class="about-roles">
               <div class="about-role"><h3>L&#xED;der</h3><p>ElCheoCL</p><img class="about-role-sprite" src="https://img.pokemondb.net/sprites/black-white/anim/normal/charizard.gif" alt="Charizard animado" loading="lazy" decoding="async"></div>
               <div class="about-role"><h3>Vicel&#xED;deres</h3><p>Driel<br>Kamfabelic<br>Enigmatic Drako<br>Mangarroy</p><img class="about-role-sprite" src="https://img.pokemondb.net/sprites/black-white/anim/normal/gengar.gif" alt="Gengar animado" loading="lazy" decoding="async"></div>
-              <div class="about-role about-role-trainers"><h3>Entrenadores</h3><p>Lumina, Taro Pro, Rruso, Daniiel Style, Jota Vnzla, Enigmatic Drako, Monkeeyz, Bati, Lady Toxyk, Frijolito, Roberthsonap, Diogogarchs, Charizardo, Tarzank, Luffy Copipe, Trild, Residentevil, Sunmaster, Darkille, Jake Nozaen, Zmwiv, Slandar</p></div>
+              <div class="about-role about-role-trainers"><h3>Entrenadores</h3><p>Lumina, Taro Pro, Rruso, Daniiel Style, Jota Vnzla, Enigmatic Drako, Mamgarroy, Monkeeyz, Bati, Lady Toxyk, Frijolito, Roberthsonap, Diogogarchs, Charizardo, Tarzank, Luffy Copipe, Trild, Residentevil, Sunmaster, Darkille, Jake Nozaen, Zmwiv, Slandar</p></div>
             </div>
           </section>
         </div>
@@ -166,7 +176,7 @@
         </div>
         <nav class="rotation-type-nav" id="rotationTypeNav" aria-label="Ir a una rotaci&#xF3;n por elemento"></nav>
         <div class="rotation-grid" id="rotationGrid"></div>
-        <p class="rotation-source">(Créditos: <a href="https://docs.google.com/document/d/1mVsLDJnSddFdjA3r_Gm66L9E5VVb1nAm/edit" target="_blank" rel="noopener noreferrer">Shaolin Pig Slayer - MOON</a>)</p>
+        <p class="rotation-source">(Fuente: <a href="https://docs.google.com/document/d/1mVsLDJnSddFdjA3r_Gm66L9E5VVb1nAm/edit" target="_blank" rel="noopener noreferrer">Shaolin Pig Slayer - MOON</a>)</p>
       </section>
 
       <section class="page-panel guild-bosses-panel" id="guild-bossesPanel" role="tabpanel" aria-labelledby="guild-bossesTab" tabindex="0" hidden>

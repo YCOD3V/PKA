@@ -288,6 +288,16 @@
   }
 
   tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.dataset.view || tab.id.replace('Tab', ''), true)));
+  challengeMenu.addEventListener('click', event => {
+    const selectedTab = event.target.closest('.section-subtab');
+    if (!selectedTab) return;
+    challengeMenu.open = false;
+    const selectedPanel = panels[selectedTab.dataset.view];
+    if (selectedPanel) {
+      selectedPanel.focus({preventScroll:true});
+      selectedPanel.scrollIntoView({block:'start'});
+    }
+  });
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
     showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'hazard' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' || hash === 'gyms' ? hash : 'home', false);
@@ -318,18 +328,46 @@
     {city:'Cinnabar',leader:'Blaine',type:'Fuego',badge:'Volcano Badge',task:['Charizard','Typhlosion'],team:['Shiny Magmar','Shiny Flareon','Shiny Ninetales','Shiny Arcanine','Shiny Charizard','Shiny Typhlosion']},
     {city:'Viridian',leader:'Giovanni',type:'Tierra',badge:'Earth Badge',task:['Nidoqueen','Nidoking'],team:['Shiny Kangaskhan','Shiny Nidoking','Shiny Nidoqueen','Shiny Dugtrio','Shiny Persian','Shiny Rhydon']}
   ];
+  const gymMapImages = Object.fromEntries(gyms.map(gym => [gym.city, './assets/gym-maps/' + gym.city.toLowerCase() + '.png']));
   const gymGrid = document.getElementById('gymGrid');
   const gymBadgeSpriteIds = {
     'Earth Badge':38284,'Volcano Badge':38283,'Boulder Badge':38277,'Cascade Badge':38278,
     'Thunder Badge':38279,'Rainbow Badge':38280,'Soul Badge':38281,'Marsh Badge':38282
   };
   const gymBadgeIcon = badge => 'https://pokealliancewiki.com/sprites/items/cliente/' + gymBadgeSpriteIds[badge] + '.png?v=4223ae0a';
+  const talentMaterials = [
+    {badge:'Boulder Badge',items:[['1','Boulder Badge','boulder-badge','/sprites/items/cliente/38277.png'],['1.500','Stone Rocks','stone-rocks','/sprites/items/cliente/35862.png'],['1.500','Horn Drill','horn-drill','/sprites/items/cliente/35898.png'],['1.100','Bone','bone','/sprites/items/cliente/35891.png'],['900','Steelix Tail','steelix-tail','/sprites/items/cliente/35994.png'],['500','Rock Stone','rock-stone','/sprites/items/stones/rock-stone.png'],['500','Earth Stone','earth-stone','/sprites/items/stones/earth-stone.png']]},
+    {badge:'Cascade Badge',items:[['1','Cascade Badge','cascade-badge','/sprites/items/cliente/38278.png'],['900','Lapras Fin','lapras-fin','/sprites/items/cliente/35917.png'],['1.100','Gyarados Tail','gyarados-tail','/sprites/items/cliente/35916.png'],['1.500','Aquatic Tail','aquatic-tail','/sprites/items/cliente/35920.png'],['1.500','Water Cannon','water-cannon','/sprites/items/cliente/35795.png'],['500','Water Stone','water-stone','/sprites/items/stones/water-stone.png'],['500','Ice Stone','ice-stone','/sprites/items/stones/ice-stone.png']]},
+    {badge:'Thunder Badge',items:[['1','Thunder Badge','thunder-badge','/sprites/items/cliente/38279.png'],['1.100','Electric Sheep Tail','electric-sheep-tail','/sprites/items/cliente/35967.png'],['1.500','Electric Tail','electric-tail','/sprites/items/cliente/35911.png'],['1.500','Electric Ear','electric-ear','/sprites/items/cliente/35812.png'],['900','Electric Collar','electric-collar','/sprites/items/cliente/35921.png'],['1.000','Thunder Stone','thunder-stone','/sprites/items/stones/thunder-stone.png']]},
+    {badge:'Rainbow Badge',items:[['1','Rainbow Badge','rainbow-badge','/sprites/items/cliente/38280.png'],['1.500','Red Petal','red-petal','/sprites/items/cliente/35789.png'],['1.500','Big Petal','big-petal','/sprites/items/cliente/35940.png'],['1.100','Coconut Leaves','coconut-leaves','/sprites/items/cliente/35889.png'],['900','Vine Hair','vine-hair','/sprites/items/cliente/35900.png'],['500','Leaf Stone','leaf-stone','/sprites/items/stones/leaf-stone.png'],['500','Cocoon Stone','cocoon-stone','/sprites/items/stones/cocoon-stone.png']]},
+    {badge:'Soul Badge',items:[['1','Soul Badge','soul-badge','/sprites/items/cliente/38281.png'],['1.500','Queen Ear','queen-ear','/sprites/items/cliente/35817.png'],['1.500','King Ear','king-ear','/sprites/items/cliente/35820.png'],['1.100','Giant Bat Wing','giant-bat-wing','/sprites/items/cliente/35955.png'],['900','Stinky Hand','stinky-hand','/sprites/items/cliente/35875.png'],['1.000','Venom Stone','venom-stone','/sprites/items/stones/venom-stone.png']]},
+    {badge:'Marsh Badge',items:[['1','Marsh Badge','marsh-badge','/sprites/items/cliente/38282.png'],['1.500','Psychic Moustache','psychic-moustache','/sprites/items/cliente/35851.png'],['1.500','Two-Eyed Black Tail','two-eyed-black-tail','/sprites/items/cliente/35988.png'],['1.100','Xatu Wing','xatu-wing','/sprites/items/cliente/35964.png'],['900','Giraffe Antenna','giraffe-antenna','/sprites/items/cliente/35989.png'],['1.000','Enigma Stone','enigma-stone','/sprites/items/stones/enigma-stone.png']]},
+    {badge:'Volcano Badge',items:[['1','Volcano Badge','volcano-badge','/sprites/items/cliente/38283.png'],['1.500','Fire Wing','fire-wing','/sprites/items/cliente/35792.png'],['1.500','Magma Foot','magma-foot','/sprites/items/cliente/35912.png'],['1.100','Giant Piece of Fur','giant-piece-of-fur','/sprites/items/cliente/35845.png'],['900','Magma Shell','magma-shell','/sprites/items/cliente/36005.png'],['1.000','Fire Stone','fire-stone','/sprites/items/stones/fire-stone.png']]},
+    {badge:'Earth Badge',items:[['1','Earth Badge','earth-badge','/sprites/items/cliente/38284.png'],['1.500','Snorlax Paw','snorlax-paw','/sprites/items/cliente/35929.png'],['1.500','Bear Claw','bear-claw','/sprites/items/cliente/36003.png'],['1.100','Cow Tail','cow-tail','/sprites/items/cliente/36027.png'],['450','Wigglytuff Ear','wigglytuff-ear','/sprites/items/cliente/35826.png'],['450','Pink Wings','pink-wings','/sprites/items/cliente/35822.png'],['1.000','Heart Stone','heart-stone','/sprites/items/stones/heart-stone.png']]}
+  ];
+  const gymItemSprite = path => 'https://pokealliancewiki.com' + path + '?v=4223ae0a';
+  const gymMaterialsList = document.getElementById('gymMaterialsList');
+  gymMaterialsList.innerHTML = talentMaterials.map(talent => '<details class="gym-talent"><summary><img src="' + escapeHtml(gymBadgeIcon(talent.badge)) + '" alt=""><span>' + escapeHtml(talent.badge) + '</span><span class="gym-talent-chevron" aria-hidden="true">⌄</span></summary><div class="gym-talent-items">' + talent.items.map(([quantity,name,slug,sprite]) => '<a class="gym-material" href="https://pokealliancewiki.com/es/items/' + escapeHtml(slug) + '/" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(quantity + ' ' + name) + '"><span class="gym-material-sprite"><span class="gym-material-viewport' + (sprite.includes('/stones/') ? ' gym-material-viewport--animated' : '') + '"><img src="' + escapeHtml(gymItemSprite(sprite)) + '" alt="' + escapeHtml(name) + '" loading="lazy"></span><span class="gym-material-sprite-quantity">' + escapeHtml(quantity) + '</span></span><span class="gym-material-name">' + escapeHtml(name) + '</span></a>').join('') + '</div></details>').join('');
   const gymSprite = (name, shiny) => {
     const entry = rotationPokemonInfo((shiny ? 'Shiny ' : '') + name);
     return entry && entry.sprite ? entry.sprite : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (shiny ? 'shiny/' : '') + ((entry && entry.id) || 0) + '.png';
   };
   const gymLeaderSprite = leader => 'https://play.pokemonshowdown.com/sprites/trainers/' + ({'Lt. Surge':'ltsurge'}[leader] || leader.toLowerCase().replaceAll(' ','')) + '.png';
-  gymGrid.innerHTML = gyms.map(gym => '<article class="gym-card"><header><img class="gym-leader-sprite" src="' + escapeHtml(gymLeaderSprite(gym.leader)) + '" alt="Sprite de ' + escapeHtml(gym.leader) + '" loading="lazy"><div><h2>' + escapeHtml(gym.leader) + '</h2><span class="gym-city">' + escapeHtml(gym.city) + ' · ' + escapeHtml(gym.type) + '</span></div></header><p class="gym-row"><strong>Tarea de Alfred:</strong> derrota 10 Shiny de cada especie. Recompensa: 1.000.000 XP y 5 Bubble Gum.</p><div class="gym-task-list">' + gym.task.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name,true)) + '" alt="" loading="lazy"><span>10 Shiny ' + escapeHtml(name) + '</span></span>').join('') + '</div><p class="gym-row"><strong>Dungeon oculta:</strong> nivel 200, en solitario, 10 min y sin Revive. Recompensa: 3.000.000 XP.</p><p class="gym-row"><strong>Batallas GYM:</strong> nivel 250, hasta 6 Pokémon. Primera victoria: insignia y Orbs de tipo ' + escapeHtml(gym.type) + '.</p><p class="gym-row gym-badge-row"><strong>Insignia:</strong> <img class="gym-badge-icon" src="' + escapeHtml(gymBadgeIcon(gym.badge)) + '" alt="" loading="lazy"><span>' + escapeHtml(gym.badge) + '</span></p><p class="gym-row gym-team-title"><strong>Equipo completo</strong></p><div class="gym-team">' + gym.team.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name, /^Shiny\s/i.test(name))) + '" alt="" loading="lazy"><span>' + escapeHtml(name) + '</span></span>').join('') + '</div></article>').join('');
+  gymGrid.innerHTML = gyms.map(gym => '<article class="gym-card"><header><img class="gym-leader-sprite" src="' + escapeHtml(gymLeaderSprite(gym.leader)) + '" alt="Sprite de ' + escapeHtml(gym.leader) + '" loading="lazy"><div><h2>' + escapeHtml(gym.leader) + '</h2><span class="gym-city">' + escapeHtml(gym.city) + ' · ' + escapeHtml(gym.type) + '</span></div></header><p class="gym-row"><strong>Tarea de Alfred:</strong> derrota 10 Shiny de cada especie. Recompensa: 1.000.000 XP y 5 Bubble Gum.</p><div class="gym-task-list">' + gym.task.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name,true)) + '" alt="" loading="lazy"><span>10 Shiny ' + escapeHtml(name) + '</span></span>').join('') + '</div><p class="gym-row"><strong>Dungeon oculta:</strong> nivel 200, en solitario, 10 min y sin Revive. Recompensa: 3.000.000 XP.</p><button class="gym-map-trigger" type="button" data-gym-map="' + escapeHtml(gym.city) + '" aria-label="Ampliar mapa de la dungeon de ' + escapeHtml(gym.city) + '"><img src="' + escapeHtml(gymMapImages[gym.city]) + '" alt="Mapa pequeño de la dungeon de ' + escapeHtml(gym.city) + '" loading="lazy" decoding="async"><span>Ver mapa</span></button><p class="gym-row"><strong>Batallas GYM:</strong> nivel 250, hasta 6 Pokémon. Primera victoria: insignia y Orbs de tipo ' + escapeHtml(gym.type) + '.</p><p class="gym-row gym-badge-row"><strong>Insignia:</strong> <img class="gym-badge-icon" src="' + escapeHtml(gymBadgeIcon(gym.badge)) + '" alt="" loading="lazy"><span>' + escapeHtml(gym.badge) + '</span></p><p class="gym-row gym-team-title"><strong>Equipo completo</strong></p><div class="gym-team">' + gym.team.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name, /^Shiny\s/i.test(name))) + '" alt="" loading="lazy"><span>' + escapeHtml(name) + '</span></span>').join('') + '</div></article>').join('');
+  const gymMapDialog = document.getElementById('gymMapDialog');
+  const gymMapDialogTitle = document.getElementById('gymMapDialogTitle');
+  const gymMapDialogImage = document.getElementById('gymMapDialogImage');
+  gymGrid.addEventListener('click', event => {
+    const trigger = event.target.closest('[data-gym-map]');
+    if (!trigger) return;
+    const city = trigger.dataset.gymMap;
+    gymMapDialogTitle.textContent = 'Dungeon de ' + city;
+    gymMapDialogImage.src = gymMapImages[city];
+    gymMapDialogImage.alt = 'Mapa ampliado de la dungeon de ' + city;
+    gymMapDialog.showModal();
+  });
+  document.getElementById('gymMapClose').addEventListener('click', () => gymMapDialog.close());
+  gymMapDialog.addEventListener('click', event => { if (event.target === gymMapDialog) gymMapDialog.close(); });
 
   const rocketCards = document.getElementById('rocketCards');
   const rocketDialog = document.getElementById('rocketDialog');

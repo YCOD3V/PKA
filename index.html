@@ -23,17 +23,29 @@
         <img src="./img/LogoClan.png" alt="Emblema de The Akatsuki" class="site-logo" width="220">
       </div>
 
-      <nav class="section-tabs" role="tablist" aria-label="Secciones del sitio">
+      <nav class="section-tabs" aria-label="Secciones del sitio">
         <button class="section-tab active" id="homeTab" type="button" role="tab" aria-controls="homePanel" aria-selected="true">Inicio</button>
         <button class="section-tab" id="aboutTab" type="button" role="tab" aria-controls="aboutPanel" aria-selected="false" tabindex="-1">&#xBF;Qui&#xE9;nes somos?</button>
         <button class="section-tab" id="rotationsTab" type="button" role="tab" aria-controls="rotationsPanel" aria-selected="false" tabindex="-1">Rotaciones</button>
-        <button class="section-tab" id="guild-bossesTab" type="button" role="tab" aria-controls="guild-bossesPanel" aria-selected="false" tabindex="-1">Guild Bosses</button>
-        <button class="section-tab" id="rocketsTab" type="button" role="tab" aria-controls="rocketsPanel" aria-selected="false" tabindex="-1">Rockets</button>
+        <details class="section-menu" id="challengesMenu">
+          <summary class="section-tab" id="challengesMenuButton" aria-haspopup="true">Cacerías y Desafíos <span aria-hidden="true">⌄</span></summary>
+          <div class="section-menu-list" aria-label="Cacerías y Desafíos">
+            <button class="section-tab section-subtab" id="guild-bossesTab" type="button" data-view="guild-bosses">Guild Bosses</button>
+            <button class="section-tab section-subtab" id="rocketsTab" type="button" data-view="rockets">Rockets</button>
+            <button class="section-tab section-subtab" id="gymsTab" type="button" data-view="gyms">GYMs</button>
+            <button class="section-tab section-subtab" id="hazardTab" type="button" data-view="hazard">Hazards</button>
+          </div>
+        </details>
         <button class="section-tab" id="pokedexTab" type="button" role="tab" aria-controls="pokedexPanel" aria-selected="false" tabindex="-1">Pokédex</button>
-        <button class="section-tab" id="hazardTab" type="button" role="tab" aria-controls="hazardPanel" aria-selected="false" tabindex="-1">Hazard</button>
         <button class="section-tab" id="huntsTab" type="button" role="tab" aria-controls="huntsPanel" aria-selected="false" tabindex="-1">Localizaciones</button>
         <button class="section-tab" id="calculatorTab" type="button" role="tab" aria-controls="calculatorPanel" aria-selected="false" tabindex="-1">Calcula ventajas</button>
       </nav>
+
+      <section class="page-panel gyms-panel" id="gymsPanel" hidden>
+        <header class="header page-header"><h1 class="title">GYMs de Kanto</h1><p class="subtitle">Las tareas de Alfred, líderes y equipos de cada gimnasio.</p></header>
+        <div class="gym-grid" id="gymGrid"></div>
+        <p class="data-credit">Extensión realizada por Driel para el clan The Akatsuki. Fuente: <a href="https://docs.google.com/spreadsheets/d/1GCH3PmFKQrBj7AA51hgqfg6Q2SrvNgrNlxgIidVeTMU/htmlview?pli=1&amp;gid=696731486&amp;pru=AAABoSc_tPI*49wkYtaCAHLL0LEigOgGPA#gid=1798431963" target="_blank" rel="noopener noreferrer">Pokédex Pública PokeAlliance</a>.</p>
+      </section>
 
       <section class="page-panel home-panel" id="homePanel" role="tabpanel" aria-labelledby="homeTab" tabindex="0">
         <img src="./assets/pokealliance-logo.png" alt="PokeAlliance" class="home-alliance-logo" width="170" height="170">

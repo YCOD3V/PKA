@@ -219,6 +219,8 @@
 
   const app = document.getElementById('app');
   const homeTab = document.getElementById('homeTab');
+  const gymsTab = document.getElementById('gymsTab');
+  const gymsPanel = document.getElementById('gymsPanel');
   const pokedexTab = document.getElementById('pokedexTab');
   const hazardTab = document.getElementById('hazardTab');
   const huntsTab = document.getElementById('huntsTab');
@@ -236,8 +238,9 @@
   const rotationsPanel = document.getElementById('rotationsPanel');
   const guildBossesPanel = document.getElementById('guild-bossesPanel');
   const rocketsPanel = document.getElementById('rocketsPanel');
-  const tabs = [homeTab, aboutTab, rotationsTab, guildBossesTab, rocketsTab, pokedexTab, hazardTab, huntsTab, calculatorTab];
-  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, 'guild-bosses': guildBossesPanel, rockets: rocketsPanel, pokedex: pokedexPanel, hazard: hazardPanel, hunts: huntsPanel, calculator: calculatorPanel };
+  const challengeMenu = document.getElementById('challengesMenu');
+  const tabs = [homeTab, aboutTab, rotationsTab, gymsTab, pokedexTab, huntsTab, calculatorTab, hazardTab, rocketsTab, guildBossesTab];
+  const panels = { home: homePanel, about: aboutPanel, rotations: rotationsPanel, gyms: gymsPanel, 'guild-bosses': guildBossesPanel, rockets: rocketsPanel, pokedex: pokedexPanel, hazard: hazardPanel, hunts: huntsPanel, calculator: calculatorPanel };
   const huntSearch = document.getElementById('huntSearch');
   const tierFilter = document.getElementById('tierFilter');
   const zoneFilter = document.getElementById('zoneFilter');
@@ -275,16 +278,19 @@
     tabs.forEach(tab => {
       const active = tab.id === activeView + 'Tab';
       tab.classList.toggle('active', active);
-      tab.setAttribute('aria-selected', String(active));
+      if (tab.hasAttribute('aria-selected')) tab.setAttribute('aria-selected', String(active));
       tab.tabIndex = active ? 0 : -1;
     });
+    const challengeActive = ['hazard','rockets','guild-bosses','gyms'].includes(activeView);
+    document.getElementById('challengesMenuButton').classList.toggle('active', challengeActive);
+    challengeMenu.open = false;
     if (updateHash && location.hash !== '#' + activeView) location.hash = activeView;
   }
 
-  tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.id.replace('Tab', ''), true)));
+  tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.dataset.view || tab.id.replace('Tab', ''), true)));
   window.addEventListener('hashchange', () => {
     const hash = location.hash.slice(1).toLowerCase();
-    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'hazard' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' ? hash : 'home', false);
+    showView(hash === 'hunts' || hash === 'calculator' || hash === 'pokedex' || hash === 'hazard' || hash === 'about' || hash === 'rotations' || hash === 'guild-bosses' || hash === 'rockets' || hash === 'gyms' ? hash : 'home', false);
   });
   tabs.forEach((tab, index) => {
     tab.addEventListener('keydown', event => {
@@ -297,10 +303,33 @@
     });
   });
   const initialHash = location.hash.slice(1).toLowerCase();
-  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'hazard' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' || initialHash === 'rockets' ? initialHash : 'home', false);
+  showView(initialHash === 'hunts' || initialHash === 'calculator' || initialHash === 'pokedex' || initialHash === 'hazard' || initialHash === 'about' || initialHash === 'rotations' || initialHash === 'guild-bosses' || initialHash === 'rockets' || initialHash === 'gyms' ? initialHash : 'home', false);
   function escapeHtml(value){
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   }
+
+  const gyms = [
+    {city:'Pewter',leader:'Brock',type:'Roca',badge:'Boulder Badge',task:['Marowak','Steelix'],team:['Shiny Marowak','Shiny Onix','Shiny Rhydon','Shiny Golem','Aerodactyl','Shiny Steelix']},
+    {city:'Cerulean',leader:'Misty',type:'Agua',badge:'Cascade Badge',task:['Blastoise','Feraligatr'],team:['Shiny Blastoise','Shiny Vaporeon','Shiny Tentacruel','Shiny Feraligatr','Shiny Politoed','Shiny Mantine']},
+    {city:'Vermilion',leader:'Lt. Surge',type:'Eléctrico',badge:'Thunder Badge',task:['Raichu','Lanturn'],team:['Shiny Magneton','Shiny Ampharos','Shiny Raichu','Shiny Lanturn','Shiny Jolteon','Shiny Electabuzz']},
+    {city:'Celadon',leader:'Erika',type:'Planta',badge:'Rainbow Badge',task:['Venusaur','Meganium'],team:['Shiny Exeggutor','Shiny Venusaur','Shiny Meganium','Shiny Tangela','Shiny Vileplume','Vileplume']},
+    {city:'Fuchsia',leader:'Koga',type:'Veneno',badge:'Soul Badge',task:['Muk','Tentacruel'],team:['Shiny Nidoking','Shiny Nidoqueen','Shiny Crobat','Shiny Tentacruel','Shiny Venomoth','Shiny Muk']},
+    {city:'Saffron',leader:'Sabrina',type:'Psíquico',badge:'Marsh Badge',task:['Espeon','Xatu'],team:['Shiny Alakazam','Shiny Xatu','Shiny Wobbuffet','Shiny Espeon','Shiny Mr. Mime','Shiny Hypno']},
+    {city:'Cinnabar',leader:'Blaine',type:'Fuego',badge:'Volcano Badge',task:['Charizard','Typhlosion'],team:['Shiny Magmar','Shiny Flareon','Shiny Ninetales','Shiny Arcanine','Shiny Charizard','Shiny Typhlosion']},
+    {city:'Viridian',leader:'Giovanni',type:'Tierra',badge:'Earth Badge',task:['Nidoqueen','Nidoking'],team:['Shiny Kangaskhan','Shiny Nidoking','Shiny Nidoqueen','Shiny Dugtrio','Shiny Persian','Shiny Rhydon']}
+  ];
+  const gymGrid = document.getElementById('gymGrid');
+  const gymBadgeSpriteIds = {
+    'Earth Badge':38284,'Volcano Badge':38283,'Boulder Badge':38277,'Cascade Badge':38278,
+    'Thunder Badge':38279,'Rainbow Badge':38280,'Soul Badge':38281,'Marsh Badge':38282
+  };
+  const gymBadgeIcon = badge => 'https://pokealliancewiki.com/sprites/items/cliente/' + gymBadgeSpriteIds[badge] + '.png?v=4223ae0a';
+  const gymSprite = (name, shiny) => {
+    const entry = rotationPokemonInfo((shiny ? 'Shiny ' : '') + name);
+    return entry && entry.sprite ? entry.sprite : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (shiny ? 'shiny/' : '') + ((entry && entry.id) || 0) + '.png';
+  };
+  const gymLeaderSprite = leader => 'https://play.pokemonshowdown.com/sprites/trainers/' + ({'Lt. Surge':'ltsurge'}[leader] || leader.toLowerCase().replaceAll(' ','')) + '.png';
+  gymGrid.innerHTML = gyms.map(gym => '<article class="gym-card"><header><img class="gym-leader-sprite" src="' + escapeHtml(gymLeaderSprite(gym.leader)) + '" alt="Sprite de ' + escapeHtml(gym.leader) + '" loading="lazy"><div><h2>' + escapeHtml(gym.leader) + '</h2><span class="gym-city">' + escapeHtml(gym.city) + ' · ' + escapeHtml(gym.type) + '</span></div></header><p class="gym-row"><strong>Tarea de Alfred:</strong> derrota 10 Shiny de cada especie. Recompensa: 1.000.000 XP y 5 Bubble Gum.</p><div class="gym-task-list">' + gym.task.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name,true)) + '" alt="" loading="lazy"><span>10 Shiny ' + escapeHtml(name) + '</span></span>').join('') + '</div><p class="gym-row"><strong>Dungeon oculta:</strong> nivel 200, en solitario, 10 min y sin Revive. Recompensa: 3.000.000 XP.</p><p class="gym-row"><strong>Batallas GYM:</strong> nivel 250, hasta 6 Pokémon. Primera victoria: insignia y Orbs de tipo ' + escapeHtml(gym.type) + '.</p><p class="gym-row gym-badge-row"><strong>Insignia:</strong> <img class="gym-badge-icon" src="' + escapeHtml(gymBadgeIcon(gym.badge)) + '" alt="" loading="lazy"><span>' + escapeHtml(gym.badge) + '</span></p><p class="gym-row gym-team-title"><strong>Equipo completo</strong></p><div class="gym-team">' + gym.team.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name, /^Shiny\s/i.test(name))) + '" alt="" loading="lazy"><span>' + escapeHtml(name) + '</span></span>').join('') + '</div></article>').join('');
 
   const rocketCards = document.getElementById('rocketCards');
   const rocketDialog = document.getElementById('rocketDialog');

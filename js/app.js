@@ -346,8 +346,19 @@
     {badge:'Earth Badge',items:[['1','Earth Badge','earth-badge','/sprites/items/cliente/38284.png'],['1.500','Snorlax Paw','snorlax-paw','/sprites/items/cliente/35929.png'],['1.500','Bear Claw','bear-claw','/sprites/items/cliente/36003.png'],['1.100','Cow Tail','cow-tail','/sprites/items/cliente/36027.png'],['450','Wigglytuff Ear','wigglytuff-ear','/sprites/items/cliente/35826.png'],['450','Pink Wings','pink-wings','/sprites/items/cliente/35822.png'],['1.000','Heart Stone','heart-stone','/sprites/items/stones/heart-stone.png']]}
   ];
   const gymItemSprite = path => 'https://pokealliancewiki.com' + path + '?v=4223ae0a';
+  const gymItemUrl = slug => 'https://pokealliancewiki.com/es/items/' + encodeURIComponent(slug) + '/';
   const gymMaterialsList = document.getElementById('gymMaterialsList');
-  gymMaterialsList.innerHTML = talentMaterials.map(talent => '<details class="gym-talent"><summary><img src="' + escapeHtml(gymBadgeIcon(talent.badge)) + '" alt=""><span>' + escapeHtml(talent.badge) + '</span><span class="gym-talent-chevron" aria-hidden="true">⌄</span></summary><div class="gym-talent-items">' + talent.items.map(([quantity,name,slug,sprite]) => '<a class="gym-material" href="https://pokealliancewiki.com/es/items/' + escapeHtml(slug) + '/" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(quantity + ' ' + name) + '"><span class="gym-material-sprite"><span class="gym-material-viewport' + (sprite.includes('/stones/') ? ' gym-material-viewport--animated' : '') + '"><img src="' + escapeHtml(gymItemSprite(sprite)) + '" alt="' + escapeHtml(name) + '" loading="lazy"></span><span class="gym-material-sprite-quantity">' + escapeHtml(quantity) + '</span></span><span class="gym-material-name">' + escapeHtml(name) + '</span></a>').join('') + '</div></details>').join('');
+  gymMaterialsList.innerHTML = talentMaterials.map(talent => '<details class="gym-talent"><summary><img src="' + escapeHtml(gymBadgeIcon(talent.badge)) + '" alt=""><span>' + escapeHtml(talent.badge) + '</span><span class="gym-talent-chevron" aria-hidden="true">⌄</span></summary><div class="gym-talent-items">' + talent.items.map(([quantity,name,slug,sprite]) => '<a class="gym-material" href="' + escapeHtml(gymItemUrl(slug)) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(quantity + ' ' + name) + '"><span class="gym-material-sprite"><span class="gym-material-viewport' + (sprite.includes('/stones/') ? ' gym-material-viewport--animated' : '') + '"><img src="' + escapeHtml(gymItemSprite(sprite)) + '" alt="' + escapeHtml(name) + '" loading="lazy"></span><span class="gym-material-sprite-quantity">' + escapeHtml(quantity) + '</span></span><span class="gym-material-name">' + escapeHtml(name) + '</span></a>').join('') + '</div></details>').join('');
+
+  gymMaterialsList.addEventListener('click', event => {
+    const summary = event.target.closest('.gym-talent > summary');
+    if (!summary) return;
+    const selected = summary.parentElement;
+    if (selected.open) return;
+    gymMaterialsList.querySelectorAll('.gym-talent[open]').forEach(openTalent => {
+      if (openTalent !== selected) openTalent.open = false;
+    });
+  });
   const gymSprite = (name, shiny) => {
     const entry = rotationPokemonInfo((shiny ? 'Shiny ' : '') + name);
     return entry && entry.sprite ? entry.sprite : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (shiny ? 'shiny/' : '') + ((entry && entry.id) || 0) + '.png';

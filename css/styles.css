@@ -713,3 +713,5 @@
 .gym-material-sprite{border-color:var(--border);background:var(--panel-2)}
 .gym-row .gym-dungeon-label{color:#ff626c;text-shadow:0 0 4px rgba(255,35,48,.78),0 0 12px rgba(255,15,30,.46);font-weight:800}
 @media(max-width:680px){.gym-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gym-leader-card{min-height:160px}.gym-leader-card .gym-leader-sprite{width:76px;height:92px}.gym-info-body{padding:12px}}
+/* Display one complete frame for stone sprites so they remain visible in the 32px icon viewport. */
+.gym-material-viewport--animated img{width:32px;height:32px;max-width:none;object-fit:none;object-position:left top;animation:none}

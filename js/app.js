@@ -353,11 +353,28 @@
     return entry && entry.sprite ? entry.sprite : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + (shiny ? 'shiny/' : '') + ((entry && entry.id) || 0) + '.png';
   };
   const gymLeaderSprite = leader => 'https://play.pokemonshowdown.com/sprites/trainers/' + ({'Lt. Surge':'ltsurge'}[leader] || leader.toLowerCase().replaceAll(' ','')) + '.png';
-  gymGrid.innerHTML = gyms.map(gym => '<article class="gym-card"><header><img class="gym-leader-sprite" src="' + escapeHtml(gymLeaderSprite(gym.leader)) + '" alt="Sprite de ' + escapeHtml(gym.leader) + '" loading="lazy"><div><h2>' + escapeHtml(gym.leader) + '</h2><span class="gym-city">' + escapeHtml(gym.city) + ' · ' + escapeHtml(gym.type) + '</span></div></header><p class="gym-row"><strong>Tarea de Alfred:</strong> derrota 10 Shiny de cada especie. Recompensa: 1.000.000 XP y 5 Bubble Gum.</p><div class="gym-task-list">' + gym.task.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name,true)) + '" alt="" loading="lazy"><span>10 Shiny ' + escapeHtml(name) + '</span></span>').join('') + '</div><p class="gym-row"><strong class="gym-dungeon-label">Dungeon oculta:</strong> nivel 200, en solitario, 10 min y sin Revive. Recompensa: 3.000.000 XP.</p><button class="gym-map-trigger" type="button" data-gym-map="' + escapeHtml(gym.city) + '" aria-label="Ampliar mapa de la dungeon de ' + escapeHtml(gym.city) + '"><img src="' + escapeHtml(gymMapImages[gym.city]) + '" alt="Mapa pequeño de la dungeon de ' + escapeHtml(gym.city) + '" loading="lazy" decoding="async"><span>Ver mapa</span></button><p class="gym-row"><strong>Batallas GYM:</strong> nivel 250, hasta 6 Pokémon. Primera victoria: insignia y Orbs de tipo ' + escapeHtml(gym.type) + '.</p><p class="gym-row gym-badge-row"><strong>Insignia:</strong> <img class="gym-badge-icon" src="' + escapeHtml(gymBadgeIcon(gym.badge)) + '" alt="" loading="lazy"><span>' + escapeHtml(gym.badge) + '</span></p><p class="gym-row gym-team-title"><strong>Equipo completo</strong></p><div class="gym-team">' + gym.team.map(name => '<span class="gym-pokemon"><img src="' + escapeHtml(gymSprite(name, /^Shiny\s/i.test(name))) + '" alt="" loading="lazy"><span>' + escapeHtml(name) + '</span></span>').join('') + '</div></article>').join('');
+  const gymInfoDialog = document.getElementById('gymInfoDialog');
+  const gymInfoTitle = document.getElementById('gymInfoTitle');
+  const gymInfoBody = document.getElementById('gymInfoBody');
   const gymMapDialog = document.getElementById('gymMapDialog');
   const gymMapDialogTitle = document.getElementById('gymMapDialogTitle');
   const gymMapDialogImage = document.getElementById('gymMapDialogImage');
+
+  function renderGymDetails(gym){
+    return `<article class="gym-card gym-detail-card"><header><img class="gym-leader-sprite" src="${escapeHtml(gymLeaderSprite(gym.leader))}" alt="Sprite de ${escapeHtml(gym.leader)}" loading="lazy"><div><h2>${escapeHtml(gym.leader)}</h2><span class="gym-city">${escapeHtml(gym.city)} \u00b7 ${escapeHtml(gym.type)}</span></div></header><p class="gym-row"><strong>Tarea de Alfred:</strong> derrota 10 Shiny de cada especie. Recompensa: 1.000.000 XP y 5 Bubble Gum.</p><div class="gym-task-list">${gym.task.map(name => `<span class="gym-pokemon"><img src="${escapeHtml(gymSprite(name,true))}" alt="" loading="lazy"><span>10 Shiny ${escapeHtml(name)}</span></span>`).join('')}</div><p class="gym-row"><strong class="gym-dungeon-label">Dungeon oculta:</strong> nivel 200, en solitario, 10 min y sin Revive. Recompensa: 3.000.000 XP.</p><button class="gym-map-trigger" type="button" data-gym-map="${escapeHtml(gym.city)}" aria-label="Ampliar mapa de la dungeon de ${escapeHtml(gym.city)}"><img src="${escapeHtml(gymMapImages[gym.city])}" alt="Mapa peque\u00f1o de la dungeon de ${escapeHtml(gym.city)}" loading="lazy" decoding="async"><span>Ver mapa</span></button><p class="gym-row"><strong>Batallas GYM:</strong> nivel 250, hasta 6 Pok\u00e9mon. Primera victoria: insignia y Orbs de tipo ${escapeHtml(gym.type)}.</p><p class="gym-row gym-badge-row"><strong>Insignia:</strong> <img class="gym-badge-icon" src="${escapeHtml(gymBadgeIcon(gym.badge))}" alt="" loading="lazy"><span>${escapeHtml(gym.badge)}</span></p><p class="gym-row gym-team-title"><strong>Equipo completo</strong></p><div class="gym-team">${gym.team.map(name => `<span class="gym-pokemon"><img src="${escapeHtml(gymSprite(name, /^Shiny\s/i.test(name)))}" alt="" loading="lazy"><span>${escapeHtml(name)}</span></span>`).join('')}</div></article>`;
+  }
+
+  gymGrid.innerHTML = gyms.map(gym => `<button class="gym-leader-card" type="button" data-gym-city="${escapeHtml(gym.city)}" aria-haspopup="dialog" aria-controls="gymInfoDialog"><img class="gym-leader-sprite" src="${escapeHtml(gymLeaderSprite(gym.leader))}" alt="" loading="lazy"><strong class="gym-leader-name">${escapeHtml(gym.leader)}</strong><span class="gym-city">${escapeHtml(gym.city)} \u00b7 ${escapeHtml(gym.type)}</span></button>`).join('');
   gymGrid.addEventListener('click', event => {
+    const card = event.target.closest('[data-gym-city]');
+    if (!card) return;
+    const gym = gyms.find(entry => entry.city === card.dataset.gymCity);
+    if (!gym) return;
+    gymInfoTitle.textContent = gym.leader + ' \u00b7 ' + gym.city;
+    gymInfoBody.innerHTML = renderGymDetails(gym);
+    gymInfoDialog.showModal();
+  });
+  gymInfoBody.addEventListener('click', event => {
     const trigger = event.target.closest('[data-gym-map]');
     if (!trigger) return;
     const city = trigger.dataset.gymMap;
@@ -366,8 +383,11 @@
     gymMapDialogImage.alt = 'Mapa ampliado de la dungeon de ' + city;
     gymMapDialog.showModal();
   });
+  document.getElementById('gymInfoClose').addEventListener('click', () => gymInfoDialog.close());
+  gymInfoDialog.addEventListener('click', event => { if (event.target === gymInfoDialog) gymInfoDialog.close(); });
   document.getElementById('gymMapClose').addEventListener('click', () => gymMapDialog.close());
   gymMapDialog.addEventListener('click', event => { if (event.target === gymMapDialog) gymMapDialog.close(); });
+  gymMapDialog.addEventListener('close', () => gymMapDialogImage.removeAttribute('src'));
 
   const rocketCards = document.getElementById('rocketCards');
   const rocketDialog = document.getElementById('rocketDialog');

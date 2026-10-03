@@ -689,3 +689,4 @@
 .hazard-guide{margin:0 auto;max-width:1000px;padding:0;text-align:center}
 .hazard-guide img{display:block;width:100%;height:auto;object-fit:contain;border:1px solid var(--border);border-radius:12px}
 .hazard-guide figcaption{margin-top:10px;color:var(--text-faint);font-size:12px}
+.gym-row .gym-dungeon-label{color:#ff626c;text-shadow:0 0 4px rgba(255,35,48,.78),0 0 12px rgba(255,15,30,.46);font-weight:800}
